@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <status>FATAL</status>
+  <code>FILE_LINK_FATAL_1</code>
+  <message>File not found.</message>
+  <app_version>28</app_version>
+</response>
