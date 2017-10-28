@@ -19,14 +19,13 @@ def query(url, data):
     return resp
 
 
-def search(what, sort='', limit=10, offset=0):
+def search(what, sort='', limit=10):
     # force min limit to 2 -- avoid special case handling of single result
     limit = str(limit) if int(limit) != 1 else '2'
     data = {
         'what': what,
         'sort': sort,
-        'limit': limit,
-        'offset': offset}
+        'limit': limit}
     resp = query(ENDPOINTS['search'], data)
     total = int(resp['total'])
     if total == 0:
