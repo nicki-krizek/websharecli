@@ -19,7 +19,7 @@ def query(url, data):
     return resp
 
 
-def search(what, sort='', limit=10):
+def search(what, sort='largest', limit=5):
     # force min limit to 2 -- avoid special case handling of single result
     limit = str(limit) if int(limit) != 1 else '2'
     data = {
