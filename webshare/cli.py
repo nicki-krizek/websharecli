@@ -2,12 +2,11 @@ import argparse
 import sys
 
 from webshare import api
-from webshare.data import File
+from webshare import commands
 
 
 def search(args):
-    data = api.search(' '.join(args.what))
-    files = [File(**entry) for entry in data]
+    files = commands.search(args.what)
     for i, file in enumerate(files):
         print("{:2d}. {}".format((i+1), file))
 

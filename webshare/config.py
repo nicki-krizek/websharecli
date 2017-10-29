@@ -11,6 +11,8 @@ class Configuration:
             data = {}
 
         self.quality = data['quality'] if 'quality' in data else []
+        if not self.quality:
+            self.quality = ['']
         self.headers = data['headers'] if 'headers' in data else {}
         self.force_vip = data['force_vip'] if 'force_vip' in data else False
 
