@@ -17,6 +17,16 @@ def get_link(args):
     print(data)
 
 
+def sample_config(args):
+    print(
+        "# ~/.config/webshare/config.yaml\n\n"
+        "wst: xxxxxxxxx\n"
+        "quality:\n"
+        "  - 1080p\n"
+        "  - 720p"
+    )
+
+
 def main():
     parser = argparse.ArgumentParser(description='webshare.cz API client')
     subparsers = parser.add_subparsers(help='choose a subcomand',
@@ -30,6 +40,9 @@ def main():
     link_parser.add_argument(
         'id', type=str, help='ID of the file')
 
+    subparsers.add_parser(
+        'sample-config', help='show configuration file example')
+
     args = parser.parse_args()
     if args.subparser is None:
         parser.print_help()
@@ -38,6 +51,7 @@ def main():
     functions = {
         'search': search,
         'link': get_link,
+        'sample-config': sample_config,
     }
     functions[args.subparser](args)
 
