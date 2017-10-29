@@ -2,6 +2,8 @@ import requests
 from urllib.parse import urljoin
 import xmltodict
 
+from webshare.config import CONFIG
+
 
 API_URI = 'https://webshare.cz/api/'
 ENDPOINTS = {
@@ -10,8 +12,8 @@ ENDPOINTS = {
 
 
 def query(url, data):
-    # TODO add wst to data
-    req = requests.post(url, data=data)
+    headers = CONFIG.headers
+    req = requests.post(url, data=data, headers=headers)
     resp = xmltodict.parse(req.text)['response']
     if resp['status'] != 'OK':
         raise Exception(
@@ -39,4 +41,6 @@ def file_link(ident):
         resp = query(ENDPOINTS['file_link'], data)
     except Exception:
         return None
+    if CONFIG.force_vip and '//vip.' not in resp['link']:
+        raise Exception("api error: not a VIP link")
     return resp['link']

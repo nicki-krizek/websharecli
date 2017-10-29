@@ -48,7 +48,7 @@ def test_search_fatal():
 def test_file_link_ok():
     link = api.file_link('xsxy0Io3Qg')
     assert link == (
-        "http://free.3.dl.webshare.cz/0029/xsxy0Io3Qg/300000/eyJhZGRyIjoiODku"
+        "http://vip.3.dl.webshare.cz/0029/xsxy0Io3Qg/300000/eyJhZGRyIjoiODku"
         "MTAyLjMxLjE5IiwidmFsaWRfdG8iOjE1MDkyNzY3NzcsInVzZXJfaWQiOm51bGwsImZy"
         "ZWUiOjF9/a85a2ad2a4ca592b9d9a70ce634c6874/Linux-Ubuntu-12.10---"
         "Quantal-Quetzal-x64.iso")

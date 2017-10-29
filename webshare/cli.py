@@ -20,7 +20,10 @@ def get_link(args):
 def sample_config(args):
     print(
         "# ~/.config/webshare/config.yaml\n\n"
-        "wst: xxxxxxxxx\n"
+        "headers:\n"
+        "  Cookie: wst=xxxxx\n"
+        "  User-Agent: XXXX\n"
+        "force_vip: true\n"
         "quality:\n"
         "  - 1080p\n"
         "  - 720p"
