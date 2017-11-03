@@ -1,4 +1,4 @@
-from util import bytes2human
+from webshare.util import bytes2human
 
 
 class File:
