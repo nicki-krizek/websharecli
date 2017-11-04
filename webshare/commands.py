@@ -3,6 +3,19 @@ from webshare.config import CONFIG
 from webshare.data import File, filter_unique
 
 
+def download(what, verbose=False):
+    """Get download link(s) for files that match the search query"""
+    results = []
+    files = search(what, limit=1)
+    if files:
+        results.append(api.file_link(files[0].ident))
+    elif verbose:
+        print(
+            'Nothing found for: "{query}"'.format(query=' '.join(what)),
+            file=sys.stderr)  # noqa
+    return results
+
+
 def search(what, limit=None):
     """Search and filter results based on quality."""
     query = ' '.join(what)

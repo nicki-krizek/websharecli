@@ -7,13 +7,8 @@ from webshare import commands
 
 
 def download(args):
-    files = commands.search(args.what, limit=1)
-    if not files:
-        print(
-            'Nothing found for: "{query}"'.format(query=' '.join(args.what)),
-            file=sys.stderr)  # noqa
-    else:
-        print(api.file_link(files[0].ident))
+    for link in commands.download(args.what):
+        print(link)
 
 
 def search(args):
