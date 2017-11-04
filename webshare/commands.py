@@ -55,3 +55,11 @@ def query_expand(query, options=None):
     for option in options:
         results.append(normalize_query(query + ' ' + option))
     return results
+
+
+def query_complete_wildcard(query):
+    """Find asterisk ('*') and replace with numbers from 00 to 99"""
+    if '*' not in query:
+        return [query]
+    return ['{}'.format(
+        query.replace('*', '{:02d}'.format(i))) for i in range(100)]

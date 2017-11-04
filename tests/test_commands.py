@@ -30,3 +30,12 @@ def test_normalize_query(query, expected):
 ])
 def test_query_expand(query, options, expected):
     assert commands.query_expand(query, options) == expected
+
+
+def test_query_complete_wildcard():
+    query = 'test *'
+    results = ['test {:02d}'.format(i) for i in range(100)]
+    assert commands.query_complete_wildcard(query) == results
+    query = 'test'
+    results = ['test']
+    assert commands.query_complete_wildcard(query) == results
