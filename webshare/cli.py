@@ -6,6 +6,16 @@ from webshare import api
 from webshare import commands
 
 
+def download(args):
+    files = commands.search(args.what, limit=1)
+    if not files:
+        print(
+            'Nothing found for: "{query}"'.format(query=' '.join(args.what)),
+            file=sys.stderr)
+    else:
+        print(api.file_link(files[0].ident))
+
+
 def search(args):
     files = commands.search(args.what, limit=args.limit)
     for i, file in enumerate(files):
@@ -35,6 +45,11 @@ def main():
     subparsers = parser.add_subparsers(help='choose a subcomand',
                                        dest='subparser')
 
+    download_parser = subparsers.add_parser(
+        'download', help='find and download file')
+    download_parser.add_argument(
+        'what', type=str, nargs='+', help='string identifying the file')
+
     search_parser = subparsers.add_parser('search', help='search for files')
     search_parser.add_argument(
         '-l', '--limit', type=int, help='limit the number of results')
@@ -54,6 +69,7 @@ def main():
         sys.exit(1)
 
     functions = {
+        'download': download,
         'search': search,
         'link': get_link,
         'sample-config': sample_config,
