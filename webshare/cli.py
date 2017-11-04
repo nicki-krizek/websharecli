@@ -7,7 +7,7 @@ from webshare import commands
 
 
 def search(args):
-    files = commands.search(args.what)
+    files = commands.search(args.what, limit=args.limit)
     for i, file in enumerate(files):
         print("{:2d}. {}".format((i+1), file))
 
@@ -36,6 +36,8 @@ def main():
                                        dest='subparser')
 
     search_parser = subparsers.add_parser('search', help='search for files')
+    search_parser.add_argument(
+        '-l', '--limit', type=int, help='limit the number of results')
     search_parser.add_argument(
         'what', type=str, nargs='+', help='string identifying the file')
 

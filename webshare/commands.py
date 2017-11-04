@@ -3,10 +3,13 @@ from webshare.config import CONFIG
 from webshare.data import File, filter_unique
 
 
-def search(what):
+def search(what, limit=None):
     """Search and filter results based on quality."""
     query = ' '.join(what)
-    return filter_unique(get_files(query))
+    results = filter_unique(get_files(query))
+    if limit:
+        results = results[:limit]
+    return results
 
 
 def get_files(query):
