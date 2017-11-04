@@ -5,20 +5,18 @@ from webshare.data import File
 
 def search(what):
     """Search and filter results based on quality."""
+    query = ' '.join(what)
+    return get_files(query)
+
+
+def get_files(query):
+    """Perform query for every configured quality and return all results"""
     results = []
-    search_term = ' '.join(what)
-
-    for quality in CONFIG.quality:
-        data = api.search(search_term + ' ' + quality)
-        files = [File(**entry) for entry in data]
-        must_match = list(what)
-        must_match.append(quality)
-        must_match = [word.upper() for word in must_match]
-        for file_ in files:
-            file_name = file_.name.upper()
-            if all([word in file_name for word in must_match]):
+    for q in query_expand(query, CONFIG.quality):
+        for entry in api.search(q):
+            file_ = File(**entry)
+            if file_.matches_query(q):
                 results.append(file_)
-
     return results
 
 
