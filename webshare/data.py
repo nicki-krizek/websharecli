@@ -64,3 +64,7 @@ class File:
             ident=self.ident,
             name=self.name)
         return fmt.format(**data)
+
+    def matches_query(self, query):
+        words = [word.lower() for word in query.split(' ')]
+        return all([word in self.name.lower() for word in words])
