@@ -11,7 +11,7 @@ def download(args):
     if not files:
         print(
             'Nothing found for: "{query}"'.format(query=' '.join(args.what)),
-            file=sys.stderr)
+            file=sys.stderr)  # noqa
     else:
         print(api.file_link(files[0].ident))
 
