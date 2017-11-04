@@ -32,8 +32,15 @@ def sample_config(args):
         "  User-Agent: XXXX\n"
         "force_vip: true\n"
         "quality:\n"
+        "  - 1080p web-dl\n"
+        "  - 1080p webrip\n"
+        "  - 1080p bluray\n"
         "  - 1080p\n"
-        "  - 720p"
+        "  - 720p web-dl\n"
+        "  - 720p webrip\n"
+        "  - 720p bluray\n"
+        "  - 720p\n"
+        "  - \"\""
     )
 
 
