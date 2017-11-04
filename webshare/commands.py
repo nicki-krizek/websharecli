@@ -1,12 +1,12 @@
 from webshare import api
 from webshare.config import CONFIG
-from webshare.data import File
+from webshare.data import File, filter_unique
 
 
 def search(what):
     """Search and filter results based on quality."""
     query = ' '.join(what)
-    return get_files(query)
+    return filter_unique(get_files(query))
 
 
 def get_files(query):

@@ -1,6 +1,6 @@
 import pytest
 
-from webshare.data import File
+from webshare.data import File, filter_unique
 
 
 TEST_API_FILE = {
@@ -37,3 +37,15 @@ def test_file_object():
 def test_file_matches_query(name, query, matches):
     file_ = File(name=name)
     assert file_.matches_query(query) == matches
+
+
+@pytest.mark.parametrize('idents, uniques', [
+    (['1'], ['1']),
+    (['1', '1'], ['1']),
+    (['1', '2'], ['1', '2']),
+    (['1', '2', '1', '3', '3', '1'], ['1', '2', '3']),
+])
+def test_filter_unique(idents, uniques):
+    filtered = filter_unique([File(ident=ident) for ident in idents])
+    uniques = [File(ident=ident) for ident in uniques]
+    assert all([f1 == f2 for f1, f2 in zip(filtered, uniques)])

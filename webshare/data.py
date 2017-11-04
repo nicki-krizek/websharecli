@@ -68,3 +68,17 @@ class File:
     def matches_query(self, query):
         words = [word.lower() for word in query.split(' ')]
         return all([word in self.name.lower() for word in words])
+
+    def __hash__(self):
+        return sum([ord(c) ** n for n, c in enumerate(self.ident)])
+
+    def __eq__(self, other):
+        return self.ident == other.ident
+
+
+def filter_unique(files):
+    uniques = []
+    for file_ in files:
+        if file_ not in uniques:
+            uniques.append(file_)
+    return uniques
