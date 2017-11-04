@@ -1,24 +1,36 @@
+import sys
+
 from webshare import api
 from webshare.config import CONFIG
 from webshare.data import File, filter_unique
 
 
-def download(what, verbose=False):
+def download(query, verbose=False):
     """Get download link(s) for files that match the search query"""
     results = []
-    files = search(what, limit=1)
-    if files:
-        results.append(api.file_link(files[0].ident))
-    elif verbose:
-        print(
-            'Nothing found for: "{query}"'.format(query=' '.join(what)),
-            file=sys.stderr)  # noqa
+    not_found = 0
+    for q in query_complete_wildcard(query):
+        files = search(q, limit=1)
+        report = '{query}: {res}'
+        if files:
+            not_found = 0
+            results.append(api.file_link(files[0].ident))
+            print(report.format(query=q, res=files[0].name),
+                  file=sys.stderr)  # noqa
+        else:
+            not_found += 1
+            print(
+                report.format(query=q, res="NOT FOUND"),
+                file=sys.stderr)  # noqa
+        if not_found >= 3:
+            if verbose:
+                print('Aborting after 3 failures', file=sys.stderr)  # noqa
+            break
     return results
 
 
-def search(what, limit=None):
+def search(query, limit=None):
     """Search and filter results based on quality."""
-    query = ' '.join(what)
     results = filter_unique(get_files(query))
     if limit:
         results = results[:limit]
