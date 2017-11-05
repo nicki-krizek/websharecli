@@ -2,17 +2,19 @@ from distutils.core import setup
 
 
 setup(
-    name="webshare-downloader",
+    name="websharecli",
     version="1.0.0",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
-    url="https://github.com/tomaskrizek/webshare-downloader",
+    url="https://github.com/tomaskrizek/websharecli",
     license="GPLv3",
-    packages=['webshare'],
+    packages=['websharecli'],
+    package_data={'websharecli': ['static/*']},
+    include_package_data=True,
     entry_points={
         'console_scripts': [
-            'webshare=webshare.cli:main'
+            'webshare=websharecli.cli:main'
         ]
     },
     long_description=open('README.md').read(),

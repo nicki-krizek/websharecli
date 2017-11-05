@@ -4,9 +4,9 @@ import os
 import shutil
 import sys
 
-from webshare import api
-from webshare import config
-from webshare import commands
+from websharecli import api
+from websharecli import config
+from websharecli import commands
 
 
 def download(args):

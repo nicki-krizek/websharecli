@@ -1,8 +1,8 @@
 import sys
 
-from webshare import api
-from webshare.config import CONFIG
-from webshare.data import File, filter_unique
+from websharecli import api
+from websharecli.config import CONFIG
+from websharecli.data import File, filter_unique
 
 
 def download(query, verbose=False):

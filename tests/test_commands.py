@@ -1,6 +1,6 @@
 import pytest
 
-from webshare import commands
+from websharecli import commands
 
 
 @pytest.mark.parametrize("query, expected", [

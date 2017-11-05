@@ -1,6 +1,6 @@
 import pytest
 
-from webshare.data import File, filter_unique
+from websharecli.data import File, filter_unique
 
 
 TEST_API_FILE = {

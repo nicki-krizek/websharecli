@@ -2,7 +2,7 @@ import requests
 from urllib.parse import urljoin
 import xmltodict
 
-from webshare.config import CONFIG
+from websharecli.config import CONFIG
 
 
 API_URI = 'https://webshare.cz/api/'

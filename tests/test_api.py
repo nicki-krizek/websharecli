@@ -2,7 +2,7 @@ import os
 import pytest
 import requests_mock
 
-from webshare import api
+from websharecli import api
 
 
 def mock_query(command, data_file):
