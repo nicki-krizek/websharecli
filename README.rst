@@ -82,3 +82,7 @@ Download file by id
     $ webshare link 76s2uj1ir4 > link
     $ wget -i link
 
+Changelog
+~~~~~~~~~
+
+- *1.0.2*: add README.rst to pypi package

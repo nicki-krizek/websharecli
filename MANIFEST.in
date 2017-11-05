@@ -1,2 +1,3 @@
-include README.md LICENSE
-recursive-include websharecli *
+include README.rst LICENSE
+recurvice-include websharecli/static *
+recursive-include websharecli *.py

@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name="websharecli",
-    version="1.0.1",
+    version="1.0.2",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
