@@ -1,4 +1,4 @@
-# Webshare.cz downloader
+# Webshare.cz CLI downloader
 
 CLI interface for getting download links for movies and TV shows from
 webshare.cz.
@@ -6,7 +6,7 @@ webshare.cz.
 ## Installation
 
 ```bash
-$ pip3 install webshare-downloader
+$ pip3 install websharecli
 $ webshare sample-config
 ```
 
