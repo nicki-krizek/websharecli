@@ -1,0 +1,5 @@
+pytest
+pyyaml
+requests
+requests_mock
+xmltodict
