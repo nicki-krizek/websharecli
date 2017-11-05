@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 import argparse
+import os
+import shutil
 import sys
 
 from webshare import api
+from webshare import config
 from webshare import commands
 
 
@@ -25,23 +28,17 @@ def get_link(args):
 
 
 def sample_config(args):
-    print(
-        "# ~/.config/webshare/config.yaml\n\n"
-        "headers:\n"
-        "  Cookie: wst=xxxxx\n"
-        "  User-Agent: XXXX\n"
-        "force_vip: true\n"
-        "quality:\n"
-        "  - 1080p web-dl\n"
-        "  - 1080p webrip\n"
-        "  - 1080p bluray\n"
-        "  - 1080p\n"
-        "  - 720p web-dl\n"
-        "  - 720p webrip\n"
-        "  - 720p bluray\n"
-        "  - 720p\n"
-        "  - \"\""
+    if os.path.exists(config.CONFIG_FILE):
+        print("Configuration file already exists in {path}".format(
+            path=config.CONFIG_FILE))
+        sys.exit(1)
+    shutil.copy(
+        config.CONFIG_FILE_TEMPLATE,
+        config.CONFIG_FILE
     )
+    print(
+        "Customize the config file to enable VIP or change default quality:\n"
+        "{path}".format(path=config.CONFIG_FILE))
 
 
 def main():
@@ -69,7 +66,7 @@ def main():
         'id', type=str, help='ID of the file')
 
     subparsers.add_parser(
-        'sample-config', help='show configuration file example')
+        'sample-config', help='create sample config file')
 
     args = parser.parse_args()
     if args.subparser is None:

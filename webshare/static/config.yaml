@@ -1,0 +1,20 @@
+# Add Cookie and User-Agent headers for VIP downloads
+headers:
+  # To find these out, log in to webshare.cz in browser and inspect headers with developer tools
+  # Cookie: wst=XXXXXXXXXXXXXXXX
+  # User-Agent: xxxxx
+
+# Recommended to turn on if you've configured VIP
+# force_vip: true
+
+# Change order or add other options to change sorting of search results
+quality:
+  - 1080p web-dl
+  - 1080p webrip
+  - 1080p bluray
+  - 1080p
+  - 720p web-dl
+  - 720p webrip
+  - 720p bluray
+  - 720p
+  - ""  # Match-all option -- recommnended to keep as last option

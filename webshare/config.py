@@ -17,5 +17,7 @@ class Configuration:
         self.force_vip = data['force_vip'] if 'force_vip' in data else False
 
 
+CONFIG_FILE_TEMPLATE = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'static', 'config.yaml')
 CONFIG_FILE = os.path.expanduser("~/.config/webshare/config.yaml")
 CONFIG = Configuration(CONFIG_FILE)
