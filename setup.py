@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name="websharecli",
-    version="1.0.0",
+    version="1.0.1",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
@@ -17,7 +17,7 @@ setup(
             'webshare=websharecli.cli:main'
         ]
     },
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
         'PyYAML',
         'requests',
