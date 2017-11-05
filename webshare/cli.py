@@ -32,6 +32,7 @@ def sample_config(args):
         print("Configuration file already exists in {path}".format(
             path=config.CONFIG_FILE))
         sys.exit(1)
+    os.makedirs(os.path.dirname(config.CONFIG_FILE), exist_ok=True)
     shutil.copy(
         config.CONFIG_FILE_TEMPLATE,
         config.CONFIG_FILE
