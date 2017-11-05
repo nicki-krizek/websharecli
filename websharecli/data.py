@@ -82,3 +82,9 @@ def filter_unique(files):
         if file_ not in uniques:
             uniques.append(file_)
     return uniques
+
+
+def filter_extensions(files, extensions=None):
+    if extensions is None:
+        return files
+    return [file_ for file_ in files if file_.type in extensions]

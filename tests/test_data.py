@@ -1,6 +1,6 @@
 import pytest
 
-from websharecli.data import File, filter_unique
+from websharecli.data import File, filter_unique, filter_extensions
 
 
 TEST_API_FILE = {
@@ -49,3 +49,20 @@ def test_filter_unique(idents, uniques):
     filtered = filter_unique([File(ident=ident) for ident in idents])
     uniques = [File(ident=ident) for ident in uniques]
     assert all([f1 == f2 for f1, f2 in zip(filtered, uniques)])
+
+
+def test_filter_extensions():
+    files_ = [
+        File(ident='1', type='a'),
+        File(ident='2', type='b'),
+        File(ident='3', type='c'),
+        File(ident='4', type='a'),
+        File(ident='5', type='ab'),
+    ]
+    assert filter_extensions(files_, None) == files_
+    assert len(filter_extensions(files_, [])) == 0
+    filtered = filter_extensions(files_, ['a', 'b'])
+    assert len(filtered) == 3
+    assert files_[0] in filtered
+    assert files_[1] in filtered
+    assert files_[3] in filtered

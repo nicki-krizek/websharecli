@@ -85,4 +85,5 @@ Download file by id
 Changelog
 ~~~~~~~~~
 
-- *1.0.2*: add README.rst to pypi package
+- **1.1.0**: added filtering by file extension
+- **1.0.2**: add README.rst to pypi package

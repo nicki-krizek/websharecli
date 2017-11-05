@@ -2,7 +2,7 @@ import sys
 
 from websharecli import api
 from websharecli.config import CONFIG
-from websharecli.data import File, filter_unique
+from websharecli.data import File, filter_unique, filter_extensions
 
 
 def download(query, verbose=False):
@@ -29,9 +29,9 @@ def download(query, verbose=False):
     return results
 
 
-def search(query, limit=None):
+def search(query, limit=None, types=CONFIG.types):
     """Search and filter results based on quality."""
-    results = filter_unique(get_files(query))
+    results = filter_extensions(filter_unique(get_files(query)), types)
     if limit:
         results = results[:limit]
     return results

@@ -18,3 +18,11 @@ quality:
   - 720p bluray
   - 720p
   - ""  # Match-all option -- recommnended to keep as last option
+
+# Whitelist for allowed file extensions
+types:
+  - mkv
+  - mp4
+  - avi
+  - m4v
+  - webm
