@@ -85,6 +85,7 @@ Download file by id
 Changelog
 ~~~~~~~~~
 
+- **1.2.0**: add fail-over logic for unavailable links in download command
 - **1.1.1**: added setuptools dependency, use YAML.safe_load()
 - **1.1.0**: added filtering by file extension
 - **1.0.2**: add README.rst to pypi package

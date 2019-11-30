@@ -11,6 +11,10 @@ ENDPOINTS = {
     'file_link': urljoin(API_URI, 'file_link/')}
 
 
+class LinkUnavailableException(Exception):
+    pass
+
+
 def query(url, data):
     headers = CONFIG.headers
     req = requests.post(url, data=data, headers=headers)
@@ -39,8 +43,8 @@ def file_link(ident):
     data = {'ident': ident}
     try:
         resp = query(ENDPOINTS['file_link'], data)
-    except Exception:
-        return None
+    except Exception as exc:
+        raise LinkUnavailableException from exc
     if CONFIG.force_vip and '//vip.' not in resp['link']:
         raise Exception("api error: not a VIP link")
     return resp['link']

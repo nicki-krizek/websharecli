@@ -56,8 +56,8 @@ def test_file_link_ok():
 
 @mock_query('file_link', 'not_found')
 def test_file_link_not_found():
-    link = api.file_link('xxxxxxxxx')
-    assert link is None
+    with pytest.raises(api.LinkUnavailableException):
+        api.file_link('xxxxxxxxx')
 
 
 def test_api_compat_search():

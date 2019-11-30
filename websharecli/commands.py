@@ -5,27 +5,41 @@ from websharecli.config import CONFIG
 from websharecli.data import File, filter_unique, filter_extensions
 
 
+def _get_link(files, query=None):
+    """Get first available link from list of file candidates."""
+    for file_ in files:
+        try:
+            link = api.file_link(file_.ident)
+        except api.LinkUnavailableException:
+            if query is not None:
+                print(
+                    '{query} SKIP: {name}'.format(
+                        query=query, name=file_.name), file=sys.stderr)
+            continue
+        else:
+            return link, file_
+    return None, None
+
+
 def download(query, verbose=False):
     """Get download link(s) for files that match the search query"""
     results = []
     not_found = 0
     for q in query_complete_wildcard(query):
-        files = search(q, limit=1)
-        report = '{query}: {res}'
-        if files:
+        files = search(q, limit=3)
+        link, file_ = _get_link(files, query=q)
+        if link is not None:
             not_found = 0
-            results.append(api.file_link(files[0].ident))
-            print(report.format(query=q, res=files[0].name),
-                  file=sys.stderr)  # noqa
+            results.append(link)
+            print('{query} OK: {name}'.format(
+                query=q, name=file_.name), file=sys.stderr)
         else:
             not_found += 1
-            print(
-                report.format(query=q, res="NOT FOUND"),
-                file=sys.stderr)  # noqa
-        if not_found >= 3:
-            if verbose:
-                print('Aborting after 3 failures', file=sys.stderr)  # noqa
-            break
+            print('{query} NOT FOUND'.format(query=q), file=sys.stderr)
+            if not_found >= 3:
+                if verbose:
+                    print('Aborting after 3 failures', file=sys.stderr)
+                break
     return results
 
 
