@@ -3,3 +3,4 @@ pyyaml
 requests
 requests_mock
 xmltodict
+setuptools
