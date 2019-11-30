@@ -6,7 +6,7 @@ class Configuration:
     def __init__(self, config_path):
         try:
             with open(config_path, 'r') as file_:
-                data = yaml.load(file_)
+                data = yaml.safe_load(file_)
         except IOError:
             data = {}
 
