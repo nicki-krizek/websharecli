@@ -85,6 +85,7 @@ Download file by id
 Changelog
 ~~~~~~~~~
 
+- **2.0.0**: update to new API (send wst in request) - config update needed!
 - **1.2.0**: add fail-over logic for unavailable links in download command
 - **1.1.1**: added setuptools dependency, use YAML.safe_load()
 - **1.1.0**: added filtering by file extension
