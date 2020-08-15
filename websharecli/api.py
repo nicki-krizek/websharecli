@@ -16,8 +16,7 @@ class LinkUnavailableException(Exception):
 
 
 def query(url, data):
-    headers = CONFIG.headers
-    req = requests.post(url, data=data, headers=headers)
+    req = requests.post(url, data=data)
     resp = xmltodict.parse(req.text)['response']
     if resp['status'] != 'OK':
         raise Exception(
