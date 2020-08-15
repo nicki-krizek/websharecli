@@ -76,7 +76,7 @@ def test_api_compat_search():
 
 
 def test_api_compat_file_link():
-    data = {'ident': '4l452c4vh5'}
+    data = {'ident': '79J2zP3h03'}
     resp = api.query(api.ENDPOINTS['file_link'], data)
     assert resp['status'] == 'OK'
     assert 'link' in resp
