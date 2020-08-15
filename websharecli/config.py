@@ -15,6 +15,7 @@ class Configuration:
             self.quality = ['']
         self.force_vip = data['force_vip'] if 'force_vip' in data else False
         self.types = data['types'] if 'types' in data else None
+        self.wst = data['wst'] if 'wst' in data else ''
 
 
 CONFIG_FILE_TEMPLATE = os.path.join(

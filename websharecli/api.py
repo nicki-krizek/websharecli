@@ -30,7 +30,9 @@ def search(what, sort='largest', limit=5):
     data = {
         'what': what,
         'sort': sort,
-        'limit': limit}
+        'limit': limit,
+        'wst': CONFIG.wst,
+    }
     resp = query(ENDPOINTS['search'], data)
     total = int(resp['total'])
     if total == 0:
@@ -39,7 +41,7 @@ def search(what, sort='largest', limit=5):
 
 
 def file_link(ident):
-    data = {'ident': ident}
+    data = {'ident': ident, 'wst': CONFIG.wst}
     try:
         resp = query(ENDPOINTS['file_link'], data)
     except Exception as exc:
