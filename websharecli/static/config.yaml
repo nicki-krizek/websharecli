@@ -8,7 +8,13 @@ wst: AwqK3EwNjehJVgSk
 
 # Change order or add other options to change sorting of search results
 quality:
+  - 2160p web-dl
+  - 2160p web
+  - 2160p webrip
+  - 2160p bluray
+  - 2160p
   - 1080p web-dl
+  - 1080p web
   - 1080p webrip
   - 1080p bluray
   - 1080p
