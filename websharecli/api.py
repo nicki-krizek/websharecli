@@ -37,6 +37,8 @@ def search(what, sort='largest', limit=5):
     total = int(resp['total'])
     if total == 0:
         return []
+    elif total == 1:
+        return [resp['file']]
     return resp['file']
 
 
