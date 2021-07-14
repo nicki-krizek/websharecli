@@ -15,6 +15,10 @@ class LinkUnavailableException(Exception):
     pass
 
 
+class NotVipLinkException(Exception):
+    pass
+
+
 def query(url, data):
     req = requests.post(url, data=data)
     resp = xmltodict.parse(req.text)['response']
@@ -42,12 +46,12 @@ def search(what, sort='largest', limit=5):
     return resp['file']
 
 
-def file_link(ident):
+def file_link(ident, ignore_vip=False):
     data = {'ident': ident, 'wst': CONFIG.wst}
     try:
         resp = query(ENDPOINTS['file_link'], data)
     except Exception as exc:
         raise LinkUnavailableException from exc
-    if CONFIG.force_vip and '//vip.' not in resp['link']:
-        raise Exception("api error: not a VIP link")
+    if not ignore_vip and CONFIG.force_vip and '//vip.' not in resp['link']:
+        raise NotVipLinkException
     return resp['link']

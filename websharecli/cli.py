@@ -14,6 +14,7 @@ def download(args):
     for link in commands.download(
             query,
             exclude=args.exclude,
+            ignore_vip=args.ignore_vip,
             verbose=args.verbose):
         print(link)
 
@@ -29,7 +30,7 @@ def search(args):
 
 
 def get_link(args):
-    data = api.file_link(args.id)
+    data = api.file_link(args.id, ignore_vip=args.ignore_vip)
     print(data)
 
 
@@ -62,6 +63,9 @@ def main():
         '-x', '--exclude', type=str, action='append',
         help='exclude results matching phrase (case-insensitive)')
     download_parser.add_argument(
+        '--ignore-vip', action='store_true',
+        help='override force_vip configuration and temporarily allow non-vip links')
+    download_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the file (use "*" to search for 00-99)')
 
@@ -75,6 +79,9 @@ def main():
         'what', type=str, nargs='+', help='string identifying the file')
 
     link_parser = subparsers.add_parser('link', help='get downloadable link')
+    link_parser.add_argument(
+        '--ignore-vip', action='store_true',
+        help='override force_vip configuration and temporarily allow non-vip links')
     link_parser.add_argument(
         'id', type=str, help='ID of the file')
 
@@ -92,7 +99,15 @@ def main():
         'link': get_link,
         'sample-config': sample_config,
     }
-    functions[args.subparser](args)
+    try:
+        functions[args.subparser](args)
+    except api.NotVipLinkException:
+        print(
+            "ERROR: Received non-VIP link. Possible causes:\n"
+            "  - wst token expired - re-login and update config\n"
+            "  - VIP membership expired - renew membership and token\n"
+            "  - unrelated/temporary error - use --ignore-vip",
+            file=sys.stderr)
 
 
 if __name__ == '__main__':

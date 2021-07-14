@@ -3,7 +3,7 @@
 # This value is likely to change after every login in browser - update as needed
 wst: AwqK3EwNjehJVgSk
 
-# Recommended to turn on if you've configured VIP
+# Turn on to always check we receive a VIP link. Recommended for VIP users.
 # force_vip: true
 
 # Change order or add other options to change sorting of search results

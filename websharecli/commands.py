@@ -5,11 +5,11 @@ from websharecli.config import CONFIG
 from websharecli.data import File, filter_unique, filter_extensions, filter_exclude
 
 
-def _get_link(files, query=None):
+def _get_link(files, query=None, ignore_vip=False):
     """Get first available link from list of file candidates."""
     for file_ in files:
         try:
-            link = api.file_link(file_.ident)
+            link = api.file_link(file_.ident, ignore_vip=ignore_vip)
         except api.LinkUnavailableException:
             if query is not None:
                 print(
@@ -21,13 +21,13 @@ def _get_link(files, query=None):
     return None, None
 
 
-def download(query, verbose=False, exclude=None):
+def download(query, verbose=False, exclude=None, ignore_vip=False):
     """Get download link(s) for files that match the search query"""
     results = []
     not_found = 0
     for q in query_complete_wildcard(query):
         files = search(q, limit=3, exclude=exclude)
-        link, file_ = _get_link(files, query=q)
+        link, file_ = _get_link(files, query=q, ignore_vip=ignore_vip)
         if link is not None:
             not_found = 0
             results.append(link)
