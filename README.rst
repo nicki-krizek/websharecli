@@ -85,6 +85,7 @@ Download file by id
 Changelog
 ~~~~~~~~~
 
+- **2.1.0**: add -x/--exclude filter and --ignore-vip
 - **2.0.2**: fix hadling of single search result
 - **2.0.1**: include missing config.yaml in PyPI package
 - **2.0.0**: update to new API (send wst in request) - config update needed!
