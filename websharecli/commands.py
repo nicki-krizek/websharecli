@@ -2,7 +2,7 @@ import sys
 
 from websharecli import api
 from websharecli.config import CONFIG
-from websharecli.data import File, filter_unique, filter_extensions
+from websharecli.data import File, filter_unique, filter_extensions, filter_exclude
 
 
 def _get_link(files, query=None):
@@ -21,12 +21,12 @@ def _get_link(files, query=None):
     return None, None
 
 
-def download(query, verbose=False):
+def download(query, verbose=False, exclude=None):
     """Get download link(s) for files that match the search query"""
     results = []
     not_found = 0
     for q in query_complete_wildcard(query):
-        files = search(q, limit=3)
+        files = search(q, limit=3, exclude=exclude)
         link, file_ = _get_link(files, query=q)
         if link is not None:
             not_found = 0
@@ -43,9 +43,12 @@ def download(query, verbose=False):
     return results
 
 
-def search(query, limit=None, types=CONFIG.types):
+def search(query, limit=None, types=CONFIG.types, exclude=None):
     """Search and filter results based on quality."""
-    results = filter_extensions(filter_unique(get_files(query)), types)
+    if exclude is None:
+        exclude = []
+    exclude.extend(CONFIG.exclude)
+    results = filter_exclude(filter_extensions(filter_unique(get_files(query)), types), exclude)
     if limit:
         results = results[:limit]
     return results

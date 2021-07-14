@@ -1,6 +1,6 @@
 import pytest
 
-from websharecli.data import File, filter_unique, filter_extensions
+from websharecli.data import File, filter_unique, filter_extensions, filter_exclude
 
 
 TEST_API_FILE = {
@@ -66,3 +66,33 @@ def test_filter_extensions():
     assert files_[0] in filtered
     assert files_[1] in filtered
     assert files_[3] in filtered
+
+
+def test_filter_exclude():
+    files_ = [
+        File(name='x'),
+        File(name='720p'),
+        File(name='hdr.720p'),
+        File(name='hdr'),
+        File(name='HDR'),
+        File(name='hDR'),
+        File(name='ahdr'),
+        File(name='ahdrb'),
+        File(name='a.hdr'),
+    ]
+    assert filter_exclude(files_, None) == files_
+    assert filter_exclude(files_, []) == files_
+
+    filtered = filter_exclude(files_, 'hdr')
+    assert len(filtered) == 2
+    assert files_[0] in filtered
+    assert files_[1] in filtered
+
+    filtered = filter_exclude(files_, 'HDR')
+    assert len(filtered) == 2
+    assert files_[0] in filtered
+    assert files_[1] in filtered
+
+    filtered = filter_exclude(files_, ['HdR', '720'])
+    assert len(filtered) == 1
+    assert files_[0] in filtered

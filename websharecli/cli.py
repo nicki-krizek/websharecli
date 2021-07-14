@@ -11,13 +11,19 @@ from websharecli import commands
 
 def download(args):
     query = ' '.join(args.what)
-    for link in commands.download(query, verbose=args.verbose):
+    for link in commands.download(
+            query,
+            exclude=args.exclude,
+            verbose=args.verbose):
         print(link)
 
 
 def search(args):
     query = ' '.join(args.what)
-    files = commands.search(query, limit=args.limit)
+    files = commands.search(
+        query,
+        exclude=args.exclude,
+        limit=args.limit)
     for i, file in enumerate(files):
         print("{:2d}. {}".format((i+1), file))
 
@@ -53,12 +59,18 @@ def main():
         '-s', '--silent', action='store_false', dest='verbose',
         help='disable status prints to stderr')
     download_parser.add_argument(
+        '-x', '--exclude', type=str, action='append',
+        help='exclude results matching phrase (case-insensitive)')
+    download_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the file (use "*" to search for 00-99)')
 
     search_parser = subparsers.add_parser('search', help='search for files')
     search_parser.add_argument(
         '-l', '--limit', type=int, help='limit the number of results')
+    search_parser.add_argument(
+        '-x', '--exclude', type=str, action='append',
+        help='exclude results matching phrase (case-insensitive)')
     search_parser.add_argument(
         'what', type=str, nargs='+', help='string identifying the file')
 

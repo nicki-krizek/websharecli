@@ -31,3 +31,7 @@ types:
   - avi
   - m4v
   - webm
+
+# Blacklist of not-allowed phrases
+# exclude:
+#   - hdr
