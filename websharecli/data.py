@@ -56,14 +56,12 @@ class File:
         return self.positive_votes - self.negative_votes
 
     def __str__(self):
-        fmt = "{size:4s} {type:3s} {rating:+1d} {ident} {name}"
-        data = dict(
+        return "{size:4s} {type:3s} {rating:+1d} {ident} {name}".format(
             size=bytes2human(self.size),
             type=self.type,
             rating=self.rating,
             ident=self.ident,
             name=self.name)
-        return fmt.format(**data)
 
     def matches_query(self, query):
         words = [word.lower() for word in query.split(' ')]

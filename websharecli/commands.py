@@ -12,9 +12,7 @@ def _get_link(files, query=None, ignore_vip=False):
             link = api.file_link(file_.ident, ignore_vip=ignore_vip)
         except api.LinkUnavailableException:
             if query is not None:
-                print(
-                    '{query} SKIP: {name}'.format(
-                        query=query, name=file_.name), file=sys.stderr)
+                print(f'{query} SKIP: {file_.name}', file=sys.stderr)
             continue
         else:
             return link, file_
@@ -32,11 +30,10 @@ def download(query, verbose=False, exclude=None, ignore_vip=False):
             if link is not None:
                 not_found = 0
                 results.append(link)
-                print('{query} OK: {name}'.format(
-                    query=q, name=file_.name), file=sys.stderr)
+                print(f'{q} OK: {file_.name}', file=sys.stderr)
             else:
                 not_found += 1
-                print('{query} NOT FOUND'.format(query=q), file=sys.stderr)
+                print(f'{q} NOT FOUND', file=sys.stderr)
                 if not_found >= 3:
                     if verbose:
                         print('Aborting after 3 failures', file=sys.stderr)
@@ -93,5 +90,4 @@ def query_complete_wildcard(query):
     """Find asterisk ('*') and replace with numbers from 00 to 99"""
     if '*' not in query:
         return [query]
-    return ['{}'.format(
-        query.replace('*', '{:02d}'.format(i))) for i in range(100)]
+    return [query.replace('*', f'{i:02d}') for i in range(100)]

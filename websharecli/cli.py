@@ -26,7 +26,7 @@ def search(args):
         exclude=args.exclude,
         limit=args.limit)
     for i, file in enumerate(files):
-        print("{:2d}. {}".format((i+1), file))
+        print(f"{i+1:2d}. {file}")
 
 
 def get_link(args):
@@ -36,8 +36,7 @@ def get_link(args):
 
 def sample_config(args):
     if os.path.exists(config.CONFIG_FILE):
-        print("Configuration file already exists in {path}".format(
-            path=config.CONFIG_FILE))
+        print(f"Configuration file already exists in {config.CONFIG_FILE}")
         sys.exit(1)
     os.makedirs(os.path.dirname(config.CONFIG_FILE), exist_ok=True)
     shutil.copy(
@@ -46,7 +45,7 @@ def sample_config(args):
     )
     print(
         "Customize the config file to enable VIP or change default quality:\n"
-        "{path}".format(path=config.CONFIG_FILE))
+        "{config.CONFIG_FILE}")
 
 
 def main():

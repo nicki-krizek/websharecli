@@ -13,7 +13,6 @@ def bytes2human(n):
         value = float(n) / prefix[symbol]
         if value <= 999 and value > 0.9:
             if value <= 9.9:
-                fmt = "{value:1.1f}{symbol}"
+                return f"{value:1.1f}{symbol}"
             else:
-                fmt = "{value:3.0f}{symbol}"
-            return fmt.format(value=value, symbol=symbol)
+                return f"{value:3.0f}{symbol}"

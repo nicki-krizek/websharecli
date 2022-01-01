@@ -23,8 +23,7 @@ def query(url, data):
     req = requests.post(url, data=data)
     resp = xmltodict.parse(req.text)['response']
     if resp['status'] != 'OK':
-        raise Exception(
-            "api error: returned status: {}".format(resp['status']))
+        raise Exception(f"api error: returned status: {resp['status']}")
     return resp
 
 
