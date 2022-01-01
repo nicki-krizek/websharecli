@@ -108,6 +108,8 @@ def main():
             "  - VIP membership expired - renew membership and token\n"
             "  - unrelated/temporary error - use --ignore-vip",
             file=sys.stderr)
+    except KeyboardInterrupt:
+        pass
 
 
 if __name__ == '__main__':

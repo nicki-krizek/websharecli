@@ -25,21 +25,24 @@ def download(query, verbose=False, exclude=None, ignore_vip=False):
     """Get download link(s) for files that match the search query"""
     results = []
     not_found = 0
-    for q in query_complete_wildcard(query):
-        files = search(q, limit=3, exclude=exclude)
-        link, file_ = _get_link(files, query=q, ignore_vip=ignore_vip)
-        if link is not None:
-            not_found = 0
-            results.append(link)
-            print('{query} OK: {name}'.format(
-                query=q, name=file_.name), file=sys.stderr)
-        else:
-            not_found += 1
-            print('{query} NOT FOUND'.format(query=q), file=sys.stderr)
-            if not_found >= 3:
-                if verbose:
-                    print('Aborting after 3 failures', file=sys.stderr)
-                break
+    try:
+        for q in query_complete_wildcard(query):
+            files = search(q, limit=3, exclude=exclude)
+            link, file_ = _get_link(files, query=q, ignore_vip=ignore_vip)
+            if link is not None:
+                not_found = 0
+                results.append(link)
+                print('{query} OK: {name}'.format(
+                    query=q, name=file_.name), file=sys.stderr)
+            else:
+                not_found += 1
+                print('{query} NOT FOUND'.format(query=q), file=sys.stderr)
+                if not_found >= 3:
+                    if verbose:
+                        print('Aborting after 3 failures', file=sys.stderr)
+                    break
+    except KeyboardInterrupt:
+        pass
     return results
 
 
