@@ -7,6 +7,7 @@ import sys
 from websharecli import api
 from websharecli import config
 from websharecli import commands
+from websharecli.terminal import T
 
 
 def download(args):
@@ -36,7 +37,7 @@ def get_link(args):
 
 def sample_config(args):
     if os.path.exists(config.CONFIG_FILE):
-        print(f"Configuration file already exists in {config.CONFIG_FILE}")
+        print(f"{T.red}Configuration file already exists in {config.CONFIG_FILE}{T.normal}")
         sys.exit(1)
     os.makedirs(os.path.dirname(config.CONFIG_FILE), exist_ok=True)
     shutil.copy(
@@ -44,8 +45,8 @@ def sample_config(args):
         config.CONFIG_FILE
     )
     print(
-        "Customize the config file to enable VIP or change default quality:\n"
-        "{config.CONFIG_FILE}")
+        "{T.yellow}Customize the config file to enable VIP or change default quality:\n"
+        "{config.CONFIG_FILE}{T.normal}")
 
 
 def main():
@@ -102,10 +103,10 @@ def main():
         functions[args.subparser](args)
     except api.NotVipLinkException:
         print(
-            "ERROR: Received non-VIP link. Possible causes:\n"
+            f"{T.red}ERROR: Received non-VIP link. Possible causes:\n"
             "  - wst token expired - re-login and update config\n"
             "  - VIP membership expired - renew membership and token\n"
-            "  - unrelated/temporary error - use --ignore-vip",
+            f"  - unrelated/temporary error - use --ignore-vip{T.normal}",
             file=sys.stderr)
     except KeyboardInterrupt:
         pass

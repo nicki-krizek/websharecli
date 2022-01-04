@@ -3,6 +3,7 @@ import sys
 from websharecli import api
 from websharecli.config import CONFIG
 from websharecli.data import File, filter_unique, filter_extensions, filter_exclude
+from websharecli.terminal import T
 
 
 def _get_link(files, query=None, ignore_vip=False):
@@ -12,7 +13,7 @@ def _get_link(files, query=None, ignore_vip=False):
             link = api.file_link(file_.ident, ignore_vip=ignore_vip)
         except api.LinkUnavailableException:
             if query is not None:
-                print(f'{query} SKIP: {file_.name}', file=sys.stderr)
+                print(f'{query} {T.yellow}SKIP{T.normal}: {file_.name}', file=sys.stderr)
             continue
         else:
             return link, file_
@@ -30,10 +31,10 @@ def download(query, verbose=False, exclude=None, ignore_vip=False):
             if link is not None:
                 not_found = 0
                 results.append(link)
-                print(f'{q} OK: {file_.name}', file=sys.stderr)
+                print(f'{q} {T.green}OK{T.normal}: {file_.name}', file=sys.stderr)
             else:
                 not_found += 1
-                print(f'{q} NOT FOUND', file=sys.stderr)
+                print(f'{q} {T.red}NOT FOUND{T.normal}', file=sys.stderr)
                 if not_found >= 3:
                     if verbose:
                         print('Aborting after 3 failures', file=sys.stderr)

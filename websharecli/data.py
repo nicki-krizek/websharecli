@@ -1,3 +1,4 @@
+from websharecli.terminal import T
 from websharecli.util import bytes2human
 
 
@@ -56,9 +57,17 @@ class File:
         return self.positive_votes - self.negative_votes
 
     def __str__(self):
-        return "{size:4s} {type:3s} {rating:+1d} {ident} {name}".format(
+        style = T.yellow
+        if self.rating > 0:
+            style = T.green
+        elif self.rating < 0:
+            style = T.red
+        return ("{size:4s} {type:3s} {style}{rating:+1d}{T.normal} "
+                "{T.cyan}{ident}{T.normal} {name}").format(
+            T=T,
             size=bytes2human(self.size),
             type=self.type,
+            style=style,
             rating=self.rating,
             ident=self.ident,
             name=self.name)
