@@ -1,3 +1,6 @@
+import sys
+
+
 class NullCallableString(str):
     """
     This emulates blessings class for cases when blessings aren't available
@@ -34,4 +37,4 @@ except Exception:
     Terminal = PlainTerminal
 
 
-T = Terminal()
+T = Terminal(stream=sys.stderr)
