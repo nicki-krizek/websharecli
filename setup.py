@@ -20,6 +20,7 @@ setup(
     },
     long_description=open('README.rst').read(),
     install_requires=[
+        'blessings',
         'PyYAML',
         'requests',
         'xmltodict',
