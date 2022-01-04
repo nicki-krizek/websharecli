@@ -50,7 +50,7 @@ def file_link(ident, ignore_vip=False):
     try:
         resp = query(ENDPOINTS['file_link'], data)
     except Exception as exc:
-        raise LinkUnavailableException from exc
+        raise LinkUnavailableException(exc) from exc
     if not ignore_vip and CONFIG.force_vip and '//vip.' not in resp['link']:
         raise NotVipLinkException
     return resp['link']

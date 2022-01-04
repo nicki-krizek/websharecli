@@ -31,7 +31,11 @@ def search(args):
 
 
 def get_link(args):
-    data = api.file_link(args.id, ignore_vip=args.ignore_vip)
+    try:
+        data = api.file_link(args.id, ignore_vip=args.ignore_vip)
+    except api.LinkUnavailableException as exc:
+        print(f'{T.red}{exc}{T.normal}', file=sys.stderr)
+        sys.exit(1)
     print(data)
 
 
