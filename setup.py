@@ -4,7 +4,7 @@ import setuptools  # noqa
 
 setup(
     name="websharecli",
-    version="2.1.0",
+    version="2.2.0",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
@@ -25,8 +25,9 @@ setup(
         'xmltodict',
     ],
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Environment :: Console',
         'Topic :: Communications :: File Sharing',
         'Topic :: Utilities',
