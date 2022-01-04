@@ -85,6 +85,7 @@ Download file by id
 Changelog
 ~~~~~~~~~
 
+- **2.2.1**: support terminal colors everywhere
 - **2.2.0**: handle keyboard interrupt; terminal colors; Python 3.6+ required
 - **2.1.0**: add -x/--exclude filter and --ignore-vip
 - **2.0.2**: fix hadling of single search result

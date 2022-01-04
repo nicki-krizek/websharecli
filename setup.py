@@ -4,7 +4,7 @@ import setuptools  # noqa
 
 setup(
     name="websharecli",
-    version="2.2.0",
+    version="2.2.1",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
