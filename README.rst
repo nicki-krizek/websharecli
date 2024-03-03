@@ -116,6 +116,7 @@ make sure tor service is running
 .. code:: bash
 
     $ systemctl status tor
+    $ systemctl start tor
 
 make sure tor runs on localhost:9050 (default), otherwise edit SocksPort in /etc/tor/torrc
 
