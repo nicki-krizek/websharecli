@@ -11,6 +11,7 @@ from websharecli.terminal import T
 from websharecli.util import ident_from_url, filename_from_url
 from websharecli.downloader import download_url, download_urls
 from websharecli.scraper import scrape_all_pages_download_links
+from websharecli.config import THREAD_POOL_SIZE
 
 
 def link_search(args):
@@ -78,10 +79,13 @@ def link_scrape(args):
     download_links, unavailable_links = scrape_all_pages_download_links(query, args.ignore_vip)
     if args.download:
         dest_dir = args.dest_dir if args.dest_dir and args.dest_dir.strip() else ""
-        if args.tor_port:
-            download_urls(download_links, dest_dir, True, args.tor_port)
+        if args.tor_ports:
+            if args.pool:
+                download_urls(download_links, dest_dir, True, args.tor_ports, args.pool)
+            else:
+                download_urls(download_links, dest_dir, True, args.tor_ports, THREAD_POOL_SIZE)
         else:
-            download_urls(download_links, dest_dir, args.tor, config.TOR_DEFAULT_PORT)
+            download_urls(download_links, dest_dir, args.tor, [config.TOR_DEFAULT_PORT], THREAD_POOL_SIZE)
     else:
         print("\n".join(download_links))
 
@@ -178,9 +182,11 @@ def main():
     link_scrape_parser.add_argument(
         '--tor', action='store_true', help='download through tor')
     link_scrape_parser.add_argument(
-        '--tor-port', type=int, help='download through specific tor port')
+        '--tor-ports', nargs='+', type=int, help='download through specific tor port')
     link_scrape_parser.add_argument(
         '--dest-dir', type=str, help='destination directory to save downloaded files to')
+    link_scrape_parser.add_argument(
+        '--pool', type=int, help='the size of the threading pool, how many files download at the same time')
     link_scrape_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the files')

@@ -1,6 +1,10 @@
 from websharecli.exceptions import InvalidUrlException
 from websharecli.terminal import T
 
+from itertools import cycle, islice
+from collections import Counter
+import os
+
 SYMBOLS = ('B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
 
 
@@ -19,6 +23,45 @@ def bytes2human(n):
                 return f"{value:1.1f}{symbol}"
             else:
                 return f"{value:3.0f}{symbol}"
+
+
+def repeat_list_to_length(lst, length):
+    # Use itertools.cycle to create an iterator that cycles through the list indefinitely
+    repeated_list = cycle(lst)
+    # Use islice to slice the repeated_list to the desired length
+    return list(islice(repeated_list, length))
+
+
+def distinguish_filenames(filenames):
+    # Count occurrences of each filename
+    filename_counts = Counter(filenames)
+
+    # Create a dictionary to store filename occurrences
+    filename_occurrences = {}
+
+    # Iterate over filenames and append a unique identifier
+    new_filenames = []
+    for i, filename in enumerate(filenames):
+        count = filename_counts[filename]
+        if count > 1:
+            if filename not in filename_occurrences:
+                filename_occurrences[filename] = 1
+            else:
+                filename_occurrences[filename] += 1
+            # Append unique identifier to filename
+            name, extension = os.path.splitext(filename)
+            new_filename = f"{name}_{filename_occurrences[filename]}{extension}"
+            new_filenames.append(new_filename)
+        else:
+            new_filenames.append(filename)
+    return new_filenames
+
+
+# Example list of filenames
+filenames = ['file1.txt', 'file2.txt', 'file1.txt', 'file3.txt', 'file2.txt', 'file4.txt']
+
+# Distinguish filenames
+distinguish_filenames(filenames)
 
 
 def ident_from_url(url):

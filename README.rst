@@ -129,6 +129,43 @@ optionally, set custom tor port with --tor-port 9050
 
     $ webshare link-search matrix 1999 --download --tor-port XXXX
 
+Scraping whole pages
+~~~~~~~~~~~~~~~~~~~
+
+this gives you download links of all files found
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999
+
+directly download all scraped files with --download, optionally --tor
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999 --download
+
+tor ports can be provided also --tor-ports XXXX YYYY
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051
+
+by default, 4 files will be downloaded in parallel
+
+    config.py THREAD_POOL_SIZE = 4
+
+if you want more performance, use --pool N and provide appropriate number of tor ports
+
+CAUTION: each port can be used for 5 concurrent downloads at maximum (recommended 4)
+
+if you want let's say 20 concurrent downloads, provide 5 tor ports
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16
+
+
+
 Changelog
 ~~~~~~~~~
 

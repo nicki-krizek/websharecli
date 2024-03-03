@@ -1,12 +1,12 @@
 import os
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
 from tqdm import tqdm
 
-from websharecli.util import filename_from_url
+from websharecli.util import filename_from_url, repeat_list_to_length, distinguish_filenames
 from websharecli.tor import make_requests_tor_session
 from websharecli.terminal import T
-from websharecli.config import CHUNK_SIZE, THREAD_POOL_SIZE
+from websharecli.config import CHUNK_SIZE
 
 
 def download_url(url, output_path, tor, tor_port):
@@ -28,44 +28,24 @@ def download_url(url, output_path, tor, tor_port):
     progress_bar.close()
 
     if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
-        print("Error: Download incomplete.")
+        print("Error: Download incomplete. Try again")
+        session.close()
+        os.remove(output_path)
+        time.sleep(1)
+        return download_url(url, output_path, tor, tor_port)
 
     print("File downloaded successfully!")
 
 
-def download_urls(urls, output_folder, tor, tor_port):
+def download_urls(urls, output_folder, tor, tor_ports, pool_size):
     output_paths = list(map(lambda x: os.path.join(output_folder, filename_from_url(x)), urls))
+    output_paths = distinguish_filenames(output_paths)
     tors = [tor]*len(urls)
-    tor_ports = [tor_port]*len(urls)    # TODO for now all links downloaded through the same tor port
-    with ThreadPoolExecutor(max_workers=3) as executor:
-        results = list(executor.map(download_url, urls, output_paths, tors, tor_ports))
-
+    ports_for_each_url = repeat_list_to_length(tor_ports, len(urls))
+    with ThreadPoolExecutor(max_workers=pool_size) as executor:
         # Submit tasks to the executor
         futures = [executor.submit(download_url, url, output_path, tor, tor_port)
-                   for (url, output_path, tor, tor_port) in zip(urls, output_paths, tors, tor_ports)]
+                   for (url, output_path, tor, tor_port) in zip(urls, output_paths, tors, ports_for_each_url)]
         # Use as_completed to get the results as they are completed
         for future in as_completed(futures):
             result = future.result()
-            print(result)
-
-    # # Make requests in parallel using threads
-    # threads = []
-    # for url, tor_port in zip(urls, tor_ports):
-    #     output_path = os.path.join(output_folder, filename_from_url(url))
-    #     print(output_path)
-    #     thread = threading.Thread(target=download_url, args=(url, output_path, tor, tor_port))
-    #     thread.start()
-    #     threads.append(thread)
-    #
-    # # Wait for all threads to finish
-    # for thread in threads:
-    #     thread.join()
-
-
-if __name__ == '__main__':
-    urls = ["https://free.1.dl.wsfiles.cz/7174/78w13o72e8/300000/eJw1j01LxTAQRf9KmIUo5LVJGpK28HDjRoQKgrjpJm0mbaCvremXPvG_GwW3c+cezv0CAyVIlYgsUSzRQMFDySisUHLNCqkLoSSF_e+4QTluw0BhiSmFGUpnhgUpjBHC+QfT5GGyHZLRkGU2Q+vb_sTJ7Qu+bx4vxE2BGNL2uH8e6Lt+JY93xO42+PnUdyG5zDIK2AjL0PFCucYx3mhtVG4aq6JQVkhrXVOITGgtlfh9X_+tQiwe2Cy9CZi01zp1fsA61fnBs0kLzOv0HkOYwvm1eqqe36qb6RwBa+ytYYszlmvcxRXLuRb59w_XBFGj/c801edec6aff0146df93d7c59b0fc7327507dd7f/11x07-Dodge-na-spalcich-1-Requiem-for-a-chevyweight-I-dvdrip-hgr.mp4",
-            # "https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi"
-            ]
-    folder = "/mnt/data/Download/TRASH/"
-    # download_urls(urls, folder, True, [9050, 9051])
-    download_url(urls[0], os.path.join(folder, "abc.txt"), True, 9050)
