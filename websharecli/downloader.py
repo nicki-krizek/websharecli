@@ -16,7 +16,7 @@ def download_url(url, output_path, tor, tor_port):
         print(f"{T.yellow}Downloading file without tor, your ip: {original_ip}{T.normal}")
     response = session.get(url, stream=True)
     total_size_in_bytes = int(response.headers.get('content-length', 0))
-    block_size = CHUNK_SIZE  # 8 KB
+    block_size = CHUNK_SIZE  # ~1 KB
 
     progress_bar = tqdm(total=total_size_in_bytes, unit='B', unit_scale=True, desc=os.path.basename(output_path))
     with open(output_path, 'wb') as f:

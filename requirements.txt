@@ -7,4 +7,4 @@ xmltodict
 setuptools
 tqdm
 socks
-sudo apt install tor
+bs4

@@ -10,6 +10,7 @@ from websharecli import commands
 from websharecli.terminal import T
 from websharecli.util import ident_from_url, filename_from_url
 from websharecli.downloader import download_url, download_urls
+from websharecli.scraper import scrape_all_pages_download_links
 
 
 def link_search(args):
@@ -72,6 +73,20 @@ def get_link_by_url(args):
         sys.exit(1)
 
 
+def link_scrape(args):
+    query = ' '.join(args.what)
+    download_links, unavailable_links = scrape_all_pages_download_links(query, args.ignore_vip)
+    if args.download:
+        dest_dir = args.dest_dir if args.dest_dir and args.dest_dir.strip() else ""
+        if args.tor_port:
+            # TODO for now all links downloaded through the same tor port
+            download_urls(download_links, dest_dir, True, [args.tor_port]*len(download_links))
+        else:
+            download_urls(download_links, dest_dir, args.tor, [config.TOR_DEFAULT_PORT]*len(download_links))
+    else:
+        print("\n".join(download_links))
+
+
 def sample_config(args):
     if os.path.exists(config.CONFIG_FILE):
         print(
@@ -109,7 +124,7 @@ def main():
     link_search_parser.add_argument(
         '--tor', action='store_true', help='download through tor')
     link_search_parser.add_argument(
-        '--tor-port', type=int, help='download through tor')
+        '--tor-port', type=int, help='download through specific tor port')
     link_search_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the file (use "*" to search for 00-99)')
@@ -132,7 +147,7 @@ def main():
     link_id_parser.add_argument(
         '--tor', action='store_true', help='download through tor')
     link_id_parser.add_argument(
-        '--tor-port', type=int, help='download through tor')
+        '--tor-port', type=int, help='download through specific tor port')
     link_id_parser.add_argument(
         'id', type=str, help='ID of the file')
 
@@ -145,9 +160,31 @@ def main():
     link_url_parser.add_argument(
         '--tor', action='store_true', help='download through tor')
     link_url_parser.add_argument(
-        '--tor-port', type=int, help='download through tor')
+        '--tor-port', type=int, help='download through specific tor port')
     link_url_parser.add_argument(
         'url', type=str, help='url of the file')
+
+    link_scrape_parser = subparsers.add_parser('link-scrape', help='search for files and scrape download links')
+    # link_scrape_parser.add_argument(
+    #     '-s', '--silent', action='store_false', dest='verbose',
+    #     help='disable status prints to stderr')
+    # link_scrape_parser.add_argument(
+    #     '-x', '--exclude', type=str, action='append',
+    #     help='exclude results matching phrase (case-insensitive)')
+    link_scrape_parser.add_argument(
+        '--ignore-vip', action='store_true',
+        help='override force_vip configuration and temporarily allow non-vip links')
+    link_scrape_parser.add_argument(
+        '--download', action='store_true', help='download the searched link')
+    link_scrape_parser.add_argument(
+        '--tor', action='store_true', help='download through tor')
+    link_scrape_parser.add_argument(
+        '--tor-port', type=int, help='download through specific tor port')
+    link_scrape_parser.add_argument(
+        '--dest-dir', type=str, help='destination directory to save downloaded files to')
+    link_scrape_parser.add_argument(
+        'what', type=str, nargs='+',
+        help='string identifying the files')
 
     subparsers.add_parser(
         'sample-config', help='create sample config file')
@@ -162,6 +199,7 @@ def main():
         'link-list': link_list,
         'link-id': get_link_by_id,
         'link-url': get_link_by_url,
+        'link-scrape': link_scrape,
         'sample-config': sample_config,
     }
     try:
