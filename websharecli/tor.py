@@ -1,17 +1,18 @@
 # Set up proxies
-proxies = {
-    'http': 'socks5h://localhost:9050',
-    'https': 'socks5h://localhost:9050'
-}
+def proxies(port):
+    return {
+        'http': f'socks5h://localhost:{port}',
+        'https': f'socks5h://localhost:{port}'
+    }
 
 
 # Function to make a GET request through Tor
-def make_requests_tor_session(tor=True):
+def make_requests_tor_session(tor, port):
     import requests
     session = requests.Session()
     original_ip = get_public_ip(session)
     if tor:
-        session.proxies.update(proxies)
+        session.proxies.update(proxies(port))
     tor_ip = get_public_ip(session)
     return session, original_ip, tor_ip
 

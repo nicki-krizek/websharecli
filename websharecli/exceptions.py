@@ -8,3 +8,7 @@ class LinkUnavailableException(WebshareCliException):
 
 class NotVipLinkException(WebshareCliException):
     pass
+
+
+class InvalidUrlException(WebshareCliException):
+    pass

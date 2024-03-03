@@ -1,6 +1,5 @@
-import sys
-from websharecli.exceptions import LinkUnavailableException
-
+from websharecli.exceptions import InvalidUrlException
+from websharecli.terminal import T
 
 SYMBOLS = ('B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
 
@@ -28,11 +27,14 @@ def ident_from_url(url):
         _, right = url.split("/file/")
         return right.split("/")[0]
     except Exception as exc:
-        print(f"invalid id and url {url}", file=sys.stderr)
-        print("use url such as https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi")
-        raise LinkUnavailableException(exc)
+        print(f"{T.red}invalid url, use url such as https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi{T.normal}")
+        raise InvalidUrlException(exc)
 
 
 def filename_from_url(url):
-    # https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi
-    return url.rsplit("/", 1)[-1]
+    try:
+        # https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi
+        return url.rsplit("/", 1)[-1]
+    except Exception as exc:
+        print(f"{T.red}invalid url, use url such as https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi{T.normal}")
+        raise InvalidUrlException(exc)

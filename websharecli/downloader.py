@@ -6,8 +6,8 @@ from websharecli.tor import make_requests_tor_session
 from websharecli.terminal import T
 
 
-def download_url(url, output_path, tor=False):
-    session, original_ip, tor_ip = make_requests_tor_session(tor)
+def download_url(url, output_path, tor, tor_port):
+    session, original_ip, tor_ip = make_requests_tor_session(tor, tor_port)
     if tor:
         print(f"{T.green}Downloading file through tor, original ip: {original_ip}; tor ip: {tor_ip}{T.normal}")
         assert original_ip != tor_ip, "Traffic is not going through tor. Exit."

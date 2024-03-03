@@ -21,7 +21,10 @@ def link_search(args):
             verbose=args.verbose)
     for link, filename in zip(links, filenames):
         if args.download:
-            download_url(link, filename, args.tor)
+            if args.tor_port:
+                download_url(link, filename, tor=True, tor_port=args.tor_port)
+            else:
+                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
         else:
             print(link)
 
@@ -91,6 +94,8 @@ def main():
         '--download', action='store_true', help='download the searched link')
     link_search_parser.add_argument(
         '--tor', action='store_true', help='download through tor')
+    link_search_parser.add_argument(
+        '--tor-port', type=int, help='download through tor')
     link_search_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the file (use "*" to search for 00-99)')

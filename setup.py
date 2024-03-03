@@ -1,10 +1,9 @@
-from distutils.core import setup
-import setuptools  # noqa
+from setuptools import setup
 
 
 setup(
     name="websharecli",
-    version="2.2.1",
+    version="2.2.2",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",

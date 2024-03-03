@@ -23,3 +23,5 @@ CONFIG_FILE_TEMPLATE = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'static', 'config.yaml')
 CONFIG_FILE = os.path.expanduser("~/.config/webshare/config.yaml")
 CONFIG = Configuration(CONFIG_FILE)
+
+TOR_DEFAULT_PORT = 9050

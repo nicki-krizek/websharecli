@@ -29,12 +29,12 @@ See instructions in config file.
 Usage
 -----
 
-Download a single file
+Search a download link of a single file
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
-    $ webshare download matrix 1999 > link
+    $ webshare link-search matrix 1999 > link
     matrix 1999: The.Matrix.1999.BluRay.1080p.DTS-HDMA.AC3.x264.dxva-FraMeSToR (CZ,EN).mkv
     $ wget -i link
 
@@ -45,7 +45,7 @@ Use asterisk (``*``) symbol to as a 00-99 wildcard.
 
 .. code:: bash
 
-    $ webshare search black mirror s02e* > links
+    $ webshare link-search black mirror s02e* > links
     black mirror s03e00: Black Mirror S03E00 White Christmas CZtit.mp4
     black mirror s03e01: Black.Mirror.S03E01.PROPER.1080p.WEBRip.X264-DEFLATE.mkv
     black mirror s03e02: Black.Mirror.S03E02.PROPER.1080p.WEBRip.X264-DEFLATE.mkv
@@ -64,7 +64,7 @@ List files
 
 .. code:: bash
 
-    $ webshare list requirem for a dream
+    $ webshare link-list requirem for a dream
      1.  12G mkv +0 76s2uj1ir4 Requiem.For.A.Dream.Director's.Cut.2000.1080p.BluRay.DTS.x264-DON.mkv
      2.  67K srt +0 5394mr11r1 Requiem.For.A.Dream.Director's.Cut.2000.1080p.BluRay.DTS.x264-DON.srt
      3. 1.7G mkv +1 5uR4b05kh2 Requiem for a Dream 2000 Unrated DC (1080p x265 10bit Tigole).mkv
@@ -79,13 +79,55 @@ Get download link using file id or file url
 
 .. code:: bash
 
-    $ webshare link 76s2uj1ir4 > link
+    $ webshare link-id 76s2uj1ir4 > link
     $ wget -i link
 
 .. code:: bash
 
-    $ webshare link https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi > link
+    $ webshare link-url https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi > link
     $ wget -i link
+
+Directly download the obtained link
+~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    $ webshare link-search matrix 1999 --download
+
+Directly download the obtained link through TOR
+~~~~~~~~~~~~~~~~~~~
+
+.. code:: bash
+
+    $ webshare link-search matrix 1999 --download --tor
+
+Exception below shows when tor is configured incorrectly
+
+    Failed to establish a new connection: [Errno 111] Connection refused')
+
+make sure you have tor installed
+
+.. code:: bash
+
+    $ apt install tor
+
+make sure tor service is running
+
+.. code:: bash
+
+    $ systemctl status tor
+
+make sure tor runs on localhost:9050 (default), otherwise edit SocksPort in /etc/tor/torrc
+
+.. code:: bash
+
+    $ grep SocksPort /etc/tor/torrc
+
+optionally, set custom tor port with --tor-port 9050
+
+.. code:: bash
+
+    $ webshare link-search matrix 1999 --download --tor-port XXXX
 
 Changelog
 ~~~~~~~~~
