@@ -8,7 +8,7 @@ from websharecli import api
 from websharecli import config
 from websharecli import commands
 from websharecli.terminal import T
-from websharecli.util import ident_from_url
+from websharecli.util import ident_from_url, filename_from_url
 from websharecli.downloader import download_url, download_urls
 
 
@@ -41,21 +41,35 @@ def link_list(args):
 
 def get_link_by_id(args):
     try:
-        data = api.file_link(args.id, ignore_vip=args.ignore_vip)
+        link = api.file_link_by_id(args.id, ignore_vip=args.ignore_vip)
+        if args.download:
+            filename = filename_from_url(link)  # FIXME not pretty, make use of data.File
+            if args.tor_port:
+                download_url(link, filename, tor=True, tor_port=args.tor_port)
+            else:
+                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
+        else:
+            print(link)
     except api.LinkUnavailableException as exc:
         print(f'{T.red}{exc}{T.normal}', file=sys.stderr)
         sys.exit(1)
-    print(data)
 
 
 def get_link_by_url(args):
     try:
         ident = ident_from_url(args.url)
-        data = api.file_link(ident, ignore_vip=args.ignore_vip)
+        link = api.file_link_by_id(ident, ignore_vip=args.ignore_vip)
+        if args.download:
+            filename = filename_from_url(link)  # FIXME not pretty, make use of data.File
+            if args.tor_port:
+                download_url(link, filename, tor=True, tor_port=args.tor_port)
+            else:
+                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
+        else:
+            print(link)
     except api.LinkUnavailableException as exc:
         print(f'{T.red}{exc}{T.normal}', file=sys.stderr)
         sys.exit(1)
-    print(data)
 
 
 def sample_config(args):
@@ -114,18 +128,26 @@ def main():
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
     link_id_parser.add_argument(
-        'id', type=str, help='ID of the file')
-    link_id_parser.add_argument(
         '--download', action='store_true', help='download the searched link')
+    link_id_parser.add_argument(
+        '--tor', action='store_true', help='download through tor')
+    link_id_parser.add_argument(
+        '--tor-port', type=int, help='download through tor')
+    link_id_parser.add_argument(
+        'id', type=str, help='ID of the file')
 
     link_url_parser = subparsers.add_parser('link-url', help='get downloadable link from file url')
     link_url_parser.add_argument(
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
     link_url_parser.add_argument(
-        'url', type=str, help='url of the file')
-    link_url_parser.add_argument(
         '--download', action='store_true', help='download the searched link')
+    link_url_parser.add_argument(
+        '--tor', action='store_true', help='download through tor')
+    link_url_parser.add_argument(
+        '--tor-port', type=int, help='download through tor')
+    link_url_parser.add_argument(
+        'url', type=str, help='url of the file')
 
     subparsers.add_parser(
         'sample-config', help='create sample config file')

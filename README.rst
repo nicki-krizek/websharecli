@@ -84,7 +84,7 @@ Get download link using file id or file url
 
 .. code:: bash
 
-    $ webshare link-url https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi > link
+    $ webshare link-url https://webshare.cz/#/file/4jw52F2kv4/mocny-vladce-oz-2013-cz-dabing-brrip-xvid-avi > link
     $ wget -i link
 
 Directly download the obtained link

@@ -3,7 +3,6 @@ from urllib.parse import urljoin
 import xmltodict
 
 from websharecli.config import CONFIG
-from websharecli.util import ident_from_url
 from websharecli.exceptions import LinkUnavailableException, NotVipLinkException
 
 
@@ -39,7 +38,7 @@ def search(what, sort='largest', limit=5):
     return resp['file']
 
 
-def file_link(ident, ignore_vip=False):
+def file_link_by_id(ident, ignore_vip=False):
     data = {'ident': ident, 'wst': CONFIG.wst}
     try:
         resp = query(ENDPOINTS['file_link'], data)
