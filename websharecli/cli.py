@@ -79,10 +79,9 @@ def link_scrape(args):
     if args.download:
         dest_dir = args.dest_dir if args.dest_dir and args.dest_dir.strip() else ""
         if args.tor_port:
-            # TODO for now all links downloaded through the same tor port
-            download_urls(download_links, dest_dir, True, [args.tor_port]*len(download_links))
+            download_urls(download_links, dest_dir, True, args.tor_port)
         else:
-            download_urls(download_links, dest_dir, args.tor, [config.TOR_DEFAULT_PORT]*len(download_links))
+            download_urls(download_links, dest_dir, args.tor, config.TOR_DEFAULT_PORT)
     else:
         print("\n".join(download_links))
 
