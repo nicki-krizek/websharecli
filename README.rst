@@ -164,11 +164,20 @@ if you want let's say 20 concurrent downloads, provide 5 tor ports
 
     $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16
 
+when scraping large number of files, there is a chance of finding files with identical names
+
+by default, all the files will be downloaded with altered name to prevent overwrite on the disk
+
+if you want to omit files with identical filename, use --skip-same
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16 --skip-same
 
 
 Changelog
 ~~~~~~~~~
-
+- **2.2.2**: syntax changed, supports direct download with tor, supports scraping
 - **2.2.1**: support terminal colors everywhere
 - **2.2.0**: handle keyboard interrupt; terminal colors; Python 3.6+ required
 - **2.1.0**: add -x/--exclude filter and --ignore-vip

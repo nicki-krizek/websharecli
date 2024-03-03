@@ -8,7 +8,7 @@ from websharecli import api
 from websharecli import config
 from websharecli import commands
 from websharecli.terminal import T
-from websharecli.util import ident_from_url, filename_from_url
+from websharecli.util import ident_from_url, filename_from_url, remove_duplicates
 from websharecli.downloader import download_url, download_urls
 from websharecli.scraper import scrape_all_pages_download_links
 from websharecli.config import THREAD_POOL_SIZE
@@ -77,6 +77,8 @@ def get_link_by_url(args):
 def link_scrape(args):
     query = ' '.join(args.what)
     download_links, unavailable_links = scrape_all_pages_download_links(query, args.ignore_vip)
+    if args.skip_same:
+        download_links = remove_duplicates(download_links)
     if args.download:
         dest_dir = args.dest_dir if args.dest_dir and args.dest_dir.strip() else ""
         if args.tor_ports:
@@ -187,6 +189,8 @@ def main():
         '--dest-dir', type=str, help='destination directory to save downloaded files to')
     link_scrape_parser.add_argument(
         '--pool', type=int, help='the size of the threading pool, how many files download at the same time')
+    link_scrape_parser.add_argument(
+        '--skip-same', action='store_true', help='skip downloading files with identical filename')
     link_scrape_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the files')

@@ -57,11 +57,9 @@ def distinguish_filenames(filenames):
     return new_filenames
 
 
-# Example list of filenames
-filenames = ['file1.txt', 'file2.txt', 'file1.txt', 'file3.txt', 'file2.txt', 'file4.txt']
-
-# Distinguish filenames
-distinguish_filenames(filenames)
+def remove_duplicates(lst):
+    seen = set()
+    return [x for x in lst if not (x in seen or seen.add(x))]
 
 
 def ident_from_url(url):
