@@ -129,16 +129,16 @@ optionally, set custom tor port with --tor-port 9050
 
     $ webshare link-search matrix 1999 --download --tor-port XXXX
 
-Scraping whole pages
+Scraping and downloading all files found
 ~~~~~~~~~~~~~~~~~~~
 
-this gives you download links of all files found
+with this you get links of all files found
 
 .. code:: bash
 
-    $ webshare link-scrape matrix 1999
+    $ webshare link-scrape matrix 1999 > links
 
-directly download all scraped files with --download, optionally --tor
+directly download all scraped files with --download, optionally --tor or --tor-ports
 
 .. code:: bash
 
