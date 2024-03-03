@@ -1,5 +1,4 @@
 from websharecli.terminal import T
-from websharecli.util import bytes2human
 
 
 class File:

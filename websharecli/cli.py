@@ -9,21 +9,26 @@ from websharecli import config
 from websharecli import commands
 from websharecli.terminal import T
 from websharecli.util import ident_from_url
+from websharecli.downloader import download_url, download_urls
 
 
-def download(args):
+def link_search(args):
     query = ' '.join(args.what)
-    for link in commands.download(
+    links, filenames = commands.link_search(
             query,
             exclude=args.exclude,
             ignore_vip=args.ignore_vip,
-            verbose=args.verbose):
-        print(link)
+            verbose=args.verbose)
+    for link, filename in zip(links, filenames):
+        if args.download:
+            download_url(link, filename, args.tor)
+        else:
+            print(link)
 
 
-def search(args):
+def link_list(args):
     query = ' '.join(args.what)
-    files = commands.search(
+    files = commands.link_list(
         query,
         exclude=args.exclude,
         limit=args.limit)
@@ -72,43 +77,50 @@ def main():
     subparsers = parser.add_subparsers(help='choose a subcomand',
                                        dest='subparser')
 
-    download_parser = subparsers.add_parser(
-        'download', help='find and download file')
-    download_parser.add_argument(
+    link_search_parser = subparsers.add_parser('link-search', help='find and download file')
+    link_search_parser.add_argument(
         '-s', '--silent', action='store_false', dest='verbose',
         help='disable status prints to stderr')
-    download_parser.add_argument(
+    link_search_parser.add_argument(
         '-x', '--exclude', type=str, action='append',
         help='exclude results matching phrase (case-insensitive)')
-    download_parser.add_argument(
+    link_search_parser.add_argument(
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
-    download_parser.add_argument(
+    link_search_parser.add_argument(
+        '--download', action='store_true', help='download the searched link')
+    link_search_parser.add_argument(
+        '--tor', action='store_true', help='download through tor')
+    link_search_parser.add_argument(
         'what', type=str, nargs='+',
         help='string identifying the file (use "*" to search for 00-99)')
 
-    search_parser = subparsers.add_parser('search', help='search for files')
-    search_parser.add_argument(
+    link_list_parser = subparsers.add_parser('link-list', help='search for files')
+    link_list_parser.add_argument(
         '-l', '--limit', type=int, help='limit the number of results')
-    search_parser.add_argument(
+    link_list_parser.add_argument(
         '-x', '--exclude', type=str, action='append',
         help='exclude results matching phrase (case-insensitive)')
-    search_parser.add_argument(
+    link_list_parser.add_argument(
         'what', type=str, nargs='+', help='string identifying the file')
 
-    link_parser = subparsers.add_parser('link-id', help='get downloadable link from file id')
-    link_parser.add_argument(
+    link_id_parser = subparsers.add_parser('link-id', help='get downloadable link from file id')
+    link_id_parser.add_argument(
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
-    link_parser.add_argument(
+    link_id_parser.add_argument(
         'id', type=str, help='ID of the file')
+    link_id_parser.add_argument(
+        '--download', action='store_true', help='download the searched link')
 
-    link_parser = subparsers.add_parser('link-url', help='get downloadable link from file url')
-    link_parser.add_argument(
+    link_url_parser = subparsers.add_parser('link-url', help='get downloadable link from file url')
+    link_url_parser.add_argument(
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
-    link_parser.add_argument(
+    link_url_parser.add_argument(
         'url', type=str, help='url of the file')
+    link_url_parser.add_argument(
+        '--download', action='store_true', help='download the searched link')
 
     subparsers.add_parser(
         'sample-config', help='create sample config file')
@@ -119,8 +131,8 @@ def main():
         sys.exit(1)
 
     functions = {
-        'download': download,
-        'search': search,
+        'link-search': link_search,
+        'link-list': link_list,
         'link-id': get_link_by_id,
         'link-url': get_link_by_url,
         'sample-config': sample_config,

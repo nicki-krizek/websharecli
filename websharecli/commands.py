@@ -20,17 +20,19 @@ def _get_link(files, query=None, ignore_vip=False):
     return None, None
 
 
-def download(query, verbose=False, exclude=None, ignore_vip=False):
+def link_search(query, verbose=False, exclude=None, ignore_vip=False):
     """Get download link(s) for files that match the search query"""
     results = []
+    filenames = []
     not_found = 0
     try:
         for q in query_complete_wildcard(query):
-            files = search(q, limit=3, exclude=exclude)
+            files = link_list(q, limit=3, exclude=exclude)
             link, file_ = _get_link(files, query=q, ignore_vip=ignore_vip)
             if link is not None:
                 not_found = 0
                 results.append(link)
+                filenames.append(file_.name)
                 print(f'{q} {T.green}OK{T.normal}: {file_.name}', file=sys.stderr)
             else:
                 not_found += 1
@@ -41,10 +43,10 @@ def download(query, verbose=False, exclude=None, ignore_vip=False):
                     break
     except KeyboardInterrupt:
         pass
-    return results
+    return results, filenames
 
 
-def search(query, limit=None, types=CONFIG.types, exclude=None):
+def link_list(query, limit=None, types=CONFIG.types, exclude=None):
     """Search and filter results based on quality."""
     if exclude is None:
         exclude = []
