@@ -25,3 +25,4 @@ CONFIG_FILE = os.path.expanduser("~/.config/webshare/config.yaml")
 CONFIG = Configuration(CONFIG_FILE)
 
 TOR_DEFAULT_PORT = 9050
+CHUNK_SIZE = 1024
