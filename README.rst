@@ -38,14 +38,14 @@ Download a single file
     matrix 1999: The.Matrix.1999.BluRay.1080p.DTS-HDMA.AC3.x264.dxva-FraMeSToR (CZ,EN).mkv
     $ wget -i link
 
-Download an entire series
+Search for download links of an entire series
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Use asterisk (``*``) symbol to as a 00-99 wildcard.
 
 .. code:: bash
 
-    $ webshare download black mirror s02e* > links
+    $ webshare search black mirror s02e* > links
     black mirror s03e00: Black Mirror S03E00 White Christmas CZtit.mp4
     black mirror s03e01: Black.Mirror.S03E01.PROPER.1080p.WEBRip.X264-DEFLATE.mkv
     black mirror s03e02: Black.Mirror.S03E02.PROPER.1080p.WEBRip.X264-DEFLATE.mkv
@@ -59,12 +59,12 @@ Use asterisk (``*``) symbol to as a 00-99 wildcard.
     Aborting after 3 failures
     $ wget -i links
 
-Search for a file
+List files
 ~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
-    $ webshare search requirem for a dream
+    $ webshare list requirem for a dream
      1.  12G mkv +0 76s2uj1ir4 Requiem.For.A.Dream.Director's.Cut.2000.1080p.BluRay.DTS.x264-DON.mkv
      2.  67K srt +0 5394mr11r1 Requiem.For.A.Dream.Director's.Cut.2000.1080p.BluRay.DTS.x264-DON.srt
      3. 1.7G mkv +1 5uR4b05kh2 Requiem for a Dream 2000 Unrated DC (1080p x265 10bit Tigole).mkv
@@ -74,12 +74,17 @@ Search for a file
      7. 700M mp4 +0 15i6n36R32 Requiem.For.A.Dream.DIRECTORS.CUT.2000.720p.BrRip.x264.YIFY.mp4
      8. 1.2G avi +1 KRdAgRvv4F Requiem za sen (Requiem For a Dream).avi
 
-Download file by id
+Get download link using file id or file url
 ~~~~~~~~~~~~~~~~~~~
 
 .. code:: bash
 
     $ webshare link 76s2uj1ir4 > link
+    $ wget -i link
+
+.. code:: bash
+
+    $ webshare link https://webshare.cz/#/file/30lWR3a77h/requiem-for-a-dream-en-dvdrip-avi > link
     $ wget -i link
 
 Changelog

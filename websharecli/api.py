@@ -3,20 +3,14 @@ from urllib.parse import urljoin
 import xmltodict
 
 from websharecli.config import CONFIG
+from websharecli.util import ident_from_url
+from websharecli.exceptions import LinkUnavailableException, NotVipLinkException
 
 
 API_URI = 'https://webshare.cz/api/'
 ENDPOINTS = {
     'search': urljoin(API_URI, 'search/'),
     'file_link': urljoin(API_URI, 'file_link/')}
-
-
-class LinkUnavailableException(Exception):
-    pass
-
-
-class NotVipLinkException(Exception):
-    pass
 
 
 def query(url, data):

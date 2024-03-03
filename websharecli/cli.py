@@ -8,6 +8,7 @@ from websharecli import api
 from websharecli import config
 from websharecli import commands
 from websharecli.terminal import T
+from websharecli.util import ident_from_url
 
 
 def download(args):
@@ -30,9 +31,19 @@ def search(args):
         print(f"{i+1:2d}. {file}", file=sys.stderr)
 
 
-def get_link(args):
+def get_link_by_id(args):
     try:
         data = api.file_link(args.id, ignore_vip=args.ignore_vip)
+    except api.LinkUnavailableException as exc:
+        print(f'{T.red}{exc}{T.normal}', file=sys.stderr)
+        sys.exit(1)
+    print(data)
+
+
+def get_link_by_url(args):
+    try:
+        ident = ident_from_url(args.url)
+        data = api.file_link(ident, ignore_vip=args.ignore_vip)
     except api.LinkUnavailableException as exc:
         print(f'{T.red}{exc}{T.normal}', file=sys.stderr)
         sys.exit(1)
@@ -85,12 +96,19 @@ def main():
     search_parser.add_argument(
         'what', type=str, nargs='+', help='string identifying the file')
 
-    link_parser = subparsers.add_parser('link', help='get downloadable link')
+    link_parser = subparsers.add_parser('link-id', help='get downloadable link from file id')
     link_parser.add_argument(
         '--ignore-vip', action='store_true',
         help='override force_vip configuration and temporarily allow non-vip links')
     link_parser.add_argument(
         'id', type=str, help='ID of the file')
+
+    link_parser = subparsers.add_parser('link-url', help='get downloadable link from file url')
+    link_parser.add_argument(
+        '--ignore-vip', action='store_true',
+        help='override force_vip configuration and temporarily allow non-vip links')
+    link_parser.add_argument(
+        'url', type=str, help='url of the file')
 
     subparsers.add_parser(
         'sample-config', help='create sample config file')
@@ -103,7 +121,8 @@ def main():
     functions = {
         'download': download,
         'search': search,
-        'link': get_link,
+        'link-id': get_link_by_id,
+        'link-url': get_link_by_url,
         'sample-config': sample_config,
     }
     try:

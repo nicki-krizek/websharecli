@@ -5,3 +5,6 @@ requests
 requests_mock
 xmltodict
 setuptools
+tqdm
+socks
+sudo apt install tor
