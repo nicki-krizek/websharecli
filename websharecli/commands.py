@@ -10,7 +10,7 @@ def _get_link(files, query=None, ignore_vip=False):
     """Get first available link from list of file candidates."""
     for file_ in files:
         try:
-            link = api.file_link(file_.ident, ignore_vip=ignore_vip)
+            link = api.file_link_by_id(file_.ident, ignore_vip=ignore_vip)
         except api.LinkUnavailableException:
             if query is not None:
                 print(f'{query} {T.yellow}SKIP{T.normal}: {file_.name}', file=sys.stderr)
