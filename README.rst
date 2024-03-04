@@ -6,11 +6,14 @@ Webshare.cz CLI Downloader
 
 Installation
 ------------
+using source distribution, tested with Python 3.7, Debian Buster
+
+create source distribution and install with pip
 
 .. code:: bash
 
-    $ pip3 install websharecli
-    $ webshare sample-config
+    $ python3 setup.py sdist
+    $ pip3 install dist/websharecli-*.tar.gz
 
 Customizing configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
