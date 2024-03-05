@@ -4,8 +4,9 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
-from websharecli.util import filename_from_url, repeat_list_to_length, distinguish_filenames
+from websharecli.util import filename_from_url, repeat_list_to_length, distinguish_filenames, ident_from_download_link
 from websharecli.tor import make_requests_tor_session
+from websharecli.api import file_link_by_id
 from websharecli.terminal import T
 from websharecli import config
 
@@ -31,9 +32,13 @@ def download_url(url, output_path, tor, tor_port):
 
     if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
         print("Error: Download incomplete. Try again", file=sys.stderr)
+        # clear current attempt
         session.close()
         os.remove(output_path)
         time.sleep(1)
+        # try again
+        ident = ident_from_download_link(url)
+        url = file_link_by_id(ident)
         return download_url(url, output_path, tor, tor_port)
 
     print("File downloaded successfully!")
