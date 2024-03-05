@@ -14,7 +14,7 @@ def get_install_requires() -> list:
 
 setup(
     name="websharecli",
-    version="2.2.3rc1",
+    version="2.2.3",
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",

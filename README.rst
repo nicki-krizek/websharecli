@@ -190,6 +190,7 @@ if the folder does not exist, it will be created automatically
 
 Changelog
 ~~~~~~~~~
+- **2.2.3**: if download fails, download link is obtained again, progress bars nicer
 - **2.2.2**: syntax changed, supports direct download with tor, supports scraping
 - **2.2.1**: support terminal colors everywhere
 - **2.2.0**: handle keyboard interrupt; terminal colors; Python 3.6+ required
