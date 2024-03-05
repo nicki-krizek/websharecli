@@ -12,3 +12,7 @@ class NotVipLinkException(WebshareCliException):
 
 class InvalidUrlException(WebshareCliException):
     pass
+
+
+class TooManyDownloadRetriesException(WebshareCliException):
+    pass

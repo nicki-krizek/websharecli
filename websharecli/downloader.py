@@ -8,10 +8,11 @@ from websharecli.util import filename_from_url, repeat_list_to_length, distingui
 from websharecli.tor import make_requests_tor_session
 from websharecli.api import file_link_by_id
 from websharecli.terminal import T
+from websharecli.exceptions import TooManyDownloadRetriesException
 from websharecli import config
 
 
-def download_url(url, output_path, tor, tor_port):
+def download_url(url, output_path, tor, tor_port, retries=3, timeout=10):
     session, original_ip, tor_ip = make_requests_tor_session(tor, tor_port)
     if tor:
         print(f"{T.green}Downloading file through tor proxies (http / https) {' / '.join(session.proxies.values())}"
@@ -35,13 +36,18 @@ def download_url(url, output_path, tor, tor_port):
         # clear current attempt
         session.close()
         os.remove(output_path)
-        time.sleep(1)
+        time.sleep(timeout)
         # try again
         ident = ident_from_download_link(url)
         url = file_link_by_id(ident)
-        return download_url(url, output_path, tor, tor_port)
+        retries -= 1
+        if retries > 0:
+            return download_url(url, output_path, tor, tor_port, retries, timeout)
+        else:
+            print("Download incomplete. No more retries.", file=sys.stderr)
+            raise TooManyDownloadRetriesException(f"Unable to download {url}. Tried {retries} times.")
 
-    print("File downloaded successfully!")
+    print("File downloaded successfully!", file=sys.stderr)
 
 
 def download_urls(urls, output_folder, tor, tor_ports, pool_size):
