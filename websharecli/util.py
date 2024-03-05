@@ -79,3 +79,15 @@ def filename_from_url(url):
     except Exception as exc:
         print(f"{T.red}invalid url, use url such as https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi{T.normal}")
         raise InvalidUrlException(exc)
+
+
+def makedir(dest_dir):
+    if dest_dir:
+        if os.path.isabs(dest_dir): # absolute path /home/user/some/folder
+            path = dest_dir
+        else:
+            path = os.path.join(os.getcwd(), dest_dir)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        elif os.path.isfile(path):  # existing file, raise error
+            raise FileExistsError(f"Cannot create destination folder {path}, already a file")

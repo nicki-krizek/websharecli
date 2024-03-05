@@ -31,7 +31,18 @@ types:
   - avi
   - m4v
   - webm
+  - zip
+  - rar
+  - tar.gz
+  - 7zip
 
 # Blacklist of not-allowed phrases
 # exclude:
 #   - hdr
+
+# Tor default port
+tor_port: 9050
+
+# chunk size 1kB for the downloader, 4 concurrent downloads by default
+chunk_size: 1024
+pool_size: 4

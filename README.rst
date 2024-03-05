@@ -96,6 +96,8 @@ Directly download the obtained link
 .. code:: bash
 
     $ webshare link-search matrix 1999 --download
+    $ webshare link-id 76s2uj1ir4 --download
+    $ webshare link-url https://webshare.cz/#/file/4jw52F2kv4/mocny-vladce-oz-2013-cz-dabing-brrip-xvid-avi --download
 
 Directly download the obtained link through TOR
 ~~~~~~~~~~~~~~~~~~~
@@ -103,6 +105,8 @@ Directly download the obtained link through TOR
 .. code:: bash
 
     $ webshare link-search matrix 1999 --download --tor
+    $ webshare link-id 76s2uj1ir4 --download --tor
+    $ webshare link-url https://webshare.cz/#/file/4jw52F2kv4/mocny-vladce-oz-2013-cz-dabing-brrip-xvid-avi --download --tor
 
 Exception below shows when tor is configured incorrectly
 
@@ -154,9 +158,7 @@ tor ports can be provided also --tor-ports XXXX YYYY
 
     $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051
 
-by default, 4 files will be downloaded in parallel
-
-    config.py THREAD_POOL_SIZE = 4
+by default, 4 files will be downloaded in parallel, see pool_size in config
 
 if you want more performance, use --pool N and provide appropriate number of tor ports
 
@@ -172,12 +174,19 @@ when scraping large number of files, there is a chance of finding files with ide
 
 by default, all the files will be downloaded with altered name to prevent overwrite on the disk
 
-if you want to omit files with identical filename, use --skip-same
+if you want to omit the other files with identical filename, use --skip-same
 
 .. code:: bash
 
     $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16 --skip-same
 
+alternatively, you can use --dest-dir to select the output folder for the downloaded files
+
+if the folder does not exist, it will be created automatically
+
+.. code:: bash
+
+    $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16 --dest-dir /some/folder/ --skip-same
 
 Changelog
 ~~~~~~~~~

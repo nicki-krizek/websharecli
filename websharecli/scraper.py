@@ -3,7 +3,6 @@ import bs4
 from websharecli.util import ident_from_url
 from websharecli.api import file_link_by_id
 from websharecli.exceptions import WebshareCliException
-from websharecli.terminal import T
 
 
 def url(query, page_num):

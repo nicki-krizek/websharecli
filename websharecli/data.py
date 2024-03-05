@@ -88,10 +88,11 @@ def filter_extensions(files, extensions=None):
     return [file_ for file_ in files if file_.type in extensions]
 
 
-def filter_exclude(files, exclude=None):
-    def filter_(files, phrase):
-        return [file for file in files if phrase.lower() not in file.name.lower()]
+def filter_(files, phrase):
+    return [file_ for file_ in files if phrase.lower() not in file_.name.lower()]
 
+
+def filter_exclude(files, exclude=None):
     if exclude is None or not len(exclude):
         return files
     if isinstance(exclude, list):

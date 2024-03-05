@@ -8,25 +8,24 @@ from websharecli import api
 from websharecli import config
 from websharecli import commands
 from websharecli.terminal import T
-from websharecli.util import ident_from_url, filename_from_url, remove_duplicates
+from websharecli.util import ident_from_url, filename_from_url, remove_duplicates, makedir
 from websharecli.downloader import download_url, download_urls
 from websharecli.scraper import scrape_all_pages_download_links
-from websharecli.config import THREAD_POOL_SIZE
 
 
 def link_search(args):
     query = ' '.join(args.what)
-    links, filenames = commands.link_search(
+    files, links = commands.link_search(
             query,
             exclude=args.exclude,
             ignore_vip=args.ignore_vip,
             verbose=args.verbose)
-    for link, filename in zip(links, filenames):
+    for link, filename in zip(files, links):
         if args.download:
             if args.tor_port:
                 download_url(link, filename, tor=True, tor_port=args.tor_port)
             else:
-                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
+                download_url(link, filename, tor=args.tor, tor_port=config.CONFIG.tor_port)
         else:
             print(link)
 
@@ -49,7 +48,7 @@ def get_link_by_id(args):
             if args.tor_port:
                 download_url(link, filename, tor=True, tor_port=args.tor_port)
             else:
-                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
+                download_url(link, filename, tor=args.tor, tor_port=config.CONFIG.tor_port)
         else:
             print(link)
     except api.LinkUnavailableException as exc:
@@ -66,7 +65,7 @@ def get_link_by_url(args):
             if args.tor_port:
                 download_url(link, filename, tor=True, tor_port=args.tor_port)
             else:
-                download_url(link, filename, tor=args.tor, tor_port=config.TOR_DEFAULT_PORT)
+                download_url(link, filename, tor=args.tor, tor_port=config.CONFIG.tor_port)
         else:
             print(link)
     except api.LinkUnavailableException as exc:
@@ -81,22 +80,21 @@ def link_scrape(args):
         download_links = remove_duplicates(download_links)
     if args.download:
         dest_dir = args.dest_dir if args.dest_dir and args.dest_dir.strip() else ""
+        makedir(dest_dir)
         if args.tor_ports:
             if args.pool:
                 download_urls(download_links, dest_dir, True, args.tor_ports, args.pool)
             else:
-                download_urls(download_links, dest_dir, True, args.tor_ports, THREAD_POOL_SIZE)
+                download_urls(download_links, dest_dir, True, args.tor_ports, config.CONFIG.pool_size)
         else:
-            download_urls(download_links, dest_dir, args.tor, [config.TOR_DEFAULT_PORT], THREAD_POOL_SIZE)
+            download_urls(download_links, dest_dir, args.tor, [config.CONFIG.tor_port], config.CONFIG.pool_size)
     else:
         print("\n".join(download_links))
 
 
 def sample_config(args):
     if os.path.exists(config.CONFIG_FILE):
-        print(
-            f"{T.red}Configuration file already exists in {config.CONFIG_FILE}{T.normal}",
-            file=sys.stderr)
+        print(f"{T.red}Configuration file already exists in {config.CONFIG_FILE}{T.normal}", file=sys.stderr)
         sys.exit(1)
     os.makedirs(os.path.dirname(config.CONFIG_FILE), exist_ok=True)
     shutil.copy(

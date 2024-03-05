@@ -1,0 +1,18 @@
+- download specific file(s) from the list
+#   link-list --download 5
+#   link-list --download 1:4
+#   link-list --download 1,2,4
+#   --tor --tor-ports --skip-same --dest-dir --pool
+#   --ignore-vip --exclude
+
+- make use of stdin
+#   webshare link-id < ids.txt > links.txt
+#   webshare link-id --download < links.txt
+
+- make download progress pretty when using large pool, progress.py
+
+- scraper is not using webshare api, implementation?
+
+- add support for quality, filetypes, size constrains, number of likes directly from cli, my ideas:
+#   webshare link-list silence of the lambs --quality 2160p --ftype mkv --size-greater 4GB --likes 5+
+#   webshare link-search silence of the lambs --quality 2160p --ftype mkv --size-closest 4GB --likes 5+
