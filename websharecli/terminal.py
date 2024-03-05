@@ -33,8 +33,7 @@ try:
     blessings.Terminal()
     Terminal = blessings.Terminal
     COLOR_TERMINAL = True
+    T = Terminal(stream=sys.stderr)
 except Exception:
     Terminal = PlainTerminal
-
-
-T = Terminal(stream=sys.stderr)
+    T = Terminal()
