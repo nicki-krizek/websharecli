@@ -12,27 +12,28 @@ from websharecli.exceptions import TooManyDownloadRetriesException
 from websharecli import config
 
 
-def download_url(url, output_path, tor, tor_port, retries=3, timeout=10):
+def download_url(url, output_path, tor, tor_port, retries=3, timeout=10, i=1, n=1):
     session, original_ip, tor_ip = make_requests_tor_session(tor, tor_port)
     if tor:
-        print(f"{T.green}Downloading file through tor proxies (http / https) {' / '.join(session.proxies.values())}"
-              f", original ip: {original_ip}; tor ip: {tor_ip}{T.normal}", file=sys.stderr)
+        # print(f"{T.green}Downloading file through tor proxies (http / https) {' / '.join(session.proxies.values())}"
+        #       f", original ip: {original_ip}; tor ip: {tor_ip}{T.normal}", file=sys.stderr)
+        pbar_desc = f"{T.cyan}{i}/{n} {T.green}TOR:{T.normal} {os.path.basename(output_path)}"
         assert original_ip != tor_ip, "Traffic is not going through tor. Exit."
     else:
-        print(f"{T.yellow}Downloading file without tor, your ip: {original_ip}{T.normal}", file=sys.stderr)
+        # print(f"{T.yellow}Downloading file without tor, your ip: {original_ip}{T.normal}", file=sys.stderr)
+        pbar_desc = f"{T.cyan}{i}/{n}{T.normal} {os.path.basename(output_path)}"
     response = session.get(url, stream=True)
     total_size_in_bytes = int(response.headers.get('content-length', 0))
     block_size = config.CONFIG.chunk_size  # ~1 KB
 
-    progress_bar = tqdm(total=total_size_in_bytes, unit='B', unit_scale=True, desc=os.path.basename(output_path))
+    progress_bar = tqdm(desc=pbar_desc, total=total_size_in_bytes, unit='B', unit_scale=True)
     with open(output_path, 'wb') as f:
         for data in response.iter_content(block_size):
             progress_bar.update(len(data))
             f.write(data)
-    progress_bar.close()
 
     if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
-        print("Error: Download incomplete. Try again", file=sys.stderr)
+        # print("Error: Download incomplete. Try again", file=sys.stderr)
         # clear current attempt
         session.close()
         os.remove(output_path)
@@ -42,12 +43,18 @@ def download_url(url, output_path, tor, tor_port, retries=3, timeout=10):
         url = file_link_by_id(ident)
         retries -= 1
         if retries > 0:
-            return download_url(url, output_path, tor, tor_port, retries, timeout)
+            progress_bar.desc = f"{T.red}RETRY{T.normal} "+progress_bar.desc
+            progress_bar.close()
+            return download_url(i, n, url, output_path, tor, tor_port, retries, timeout)
         else:
-            print("Download incomplete. No more retries.", file=sys.stderr)
+            # print("Download incomplete. No more retries.", file=sys.stderr)
+            progress_bar.desc = f"{T.red}FAIL{T.normal} " + progress_bar.desc
+            progress_bar.close()
             raise TooManyDownloadRetriesException(f"Unable to download {url}. Tried {retries} times.")
-
-    print("File downloaded successfully!", file=sys.stderr)
+    else:
+        progress_bar.desc = f"{T.green}SUCCESS{T.normal} " + progress_bar.desc
+        progress_bar.close()
+        # print("File downloaded successfully!", file=sys.stderr)
 
 
 def download_urls(urls, output_folder, tor, tor_ports, pool_size):
@@ -57,8 +64,9 @@ def download_urls(urls, output_folder, tor, tor_ports, pool_size):
     ports_for_each_url = repeat_list_to_length(tor_ports, len(urls))
     with ThreadPoolExecutor(max_workers=pool_size) as executor:
         # Submit tasks to the executor
-        futures = [executor.submit(download_url, url, output_path, tor, tor_port)
-                   for (url, output_path, tor, tor_port) in zip(urls, output_paths, tors, ports_for_each_url)]
+        futures = [executor.submit(download_url, url, output_path, tor, tor_port, i, n)
+                   for (url, output_path, tor, tor_port, i, n) in
+                   zip(urls, output_paths, tors, ports_for_each_url, range(1, len(urls)+1), [len(urls)]*len(urls))]
         # Use as_completed to get the results as they are completed
         for future in as_completed(futures):
             result = future.result()
