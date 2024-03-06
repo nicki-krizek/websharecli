@@ -102,4 +102,4 @@ def makedir(dest_dir):
 
 
 if __name__ == '__main__':
-    ident_from_download_link(1)
+    print(remove_duplicates(["a", "b", "a", "a", "c"]))

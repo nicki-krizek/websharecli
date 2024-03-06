@@ -8,6 +8,13 @@ Installation
 ------------
 using source distribution, tested with Python 3.7, Debian Buster
 
+install required packages first
+
+.. code:: bash
+
+    $ pip3 install -r requirements.txt
+
+
 create source distribution and install with pip
 
 .. code:: bash
