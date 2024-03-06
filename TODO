@@ -17,6 +17,6 @@
 #   webshare link-list silence of the lambs --quality 2160p --ftype mkv --size-greater 4GB --likes 5+
 #   webshare link-search silence of the lambs --quality 2160p --ftype mkv --size-closest 4GB --likes 5+
 
-- tor circuit fails accessing tor after certain amount of time or after certain amount of data downloaded
+- tor circuit fails accessing webshare after certain amount of time or after certain amount of data downloaded
 #   if RETRY during download, find another tor route
 #   this needs pausing/stopping all connections going through the port
