@@ -16,7 +16,7 @@ def download_url(url, output_path, tor, tor_port, i=1, n=1, retries=3, timeout=1
     if tor:
         # print(f"{T.green}Downloading file through tor proxies (http / https) {' / '.join(session.proxies.values())}"
         #       f", original ip: {original_ip}; tor ip: {tor_ip}{T.normal}", file=sys.stderr)
-        pbar_desc = f"{i}/{n} {T.magenta}(TOR){T.normal} {os.path.basename(output_path)}"
+        pbar_desc = f"{i}/{n} {T.magenta}(TOR:{tor_ip}){T.normal} {os.path.basename(output_path)}"
         assert original_ip != tor_ip, "Traffic is not going through tor. Exit."
     else:
         # print(f"{T.yellow}Downloading file without tor, your ip: {original_ip}{T.normal}", file=sys.stderr)
