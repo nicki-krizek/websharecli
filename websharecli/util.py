@@ -15,7 +15,7 @@ def bytes2human(n):
         raise ValueError("n < 0")
     prefix = {}
     for i, s in enumerate(SYMBOLS):
-        prefix[s] = 1 << i*10
+        prefix[s] = 1 << i * 10
     for symbol in reversed(SYMBOLS):
         value = float(n) / prefix[symbol]
         if 999 >= value > 0.9:
@@ -59,7 +59,13 @@ def distinguish_filenames(filenames):
 
 def remove_duplicates(lst):
     seen = set()
-    return [x for x in lst if not (x in seen or seen.add(x))]
+    ret = []
+    for i, link in enumerate(lst):
+        fname = filename_from_url(link)
+        if fname not in seen:
+            seen.add(fname)
+            ret.append(link)
+    return ret
 
 
 def ident_from_url(url):
@@ -68,12 +74,13 @@ def ident_from_url(url):
         _, right = url.split("/file/")
         return right.split("/")[0]
     except Exception as exc:
-        print(f"{T.red}invalid url, use url such as https://webshare.cz/#/file/4jw52F2kv4/mocny-vladce-oz-2013-cz-dabing-brrip-xvid-avi{T.normal}")
+        print(
+            f"{T.red}invalid url, use url such as https://webshare.cz/#/file/4jw52F2kv4/mocny-vladce-oz-2013-cz-dabing-brrip-xvid-avi{T.normal}")
         raise InvalidUrlException(exc)
 
 
 def ident_from_download_link(download_link):
-     # "https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi"
+    # "https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi"
     try:
         return download_link.split("/")[4]
     except Exception as exc:
@@ -85,13 +92,14 @@ def filename_from_url(url):
         # https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi
         return url.rsplit("/", 1)[-1]
     except Exception as exc:
-        print(f"{T.red}invalid url, use url such as https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi{T.normal}")
+        print(
+            f"{T.red}invalid url, use url such as https://free.5.dl.wsfiles.cz/1104/4j47jd5X95/300000/eJw1js1OxCAURt_lLlwB5a8gJBMfwKSujC66gQIzTJqOobSaGt9dNJndzf3u+c79BgcWpCJcEEWJBgQZLEVQwTJNjdRGMIlg_19uYJdtnhGsLUXwATa5eY0IllZyLm7P1U3Z4fsY8XTg4HxezphTJvHXngNpWdOEhoiYmFHJJ8q81k49Oh9U0wojQ0jecMG1lor_nde7uzTwM_r14kok0zF2Kc9x7ORV6mvo300_dk+xlFs5vQ7Pw8vb8HA7tYLauFq29ux6gNWC970WjP_8AhJHSeg/ea97ae17fd7f12945faf6b798b18282e4969232d/gravitacia-gravitace-cz-dabing-2014-xvid.avi{T.normal}")
         raise InvalidUrlException(exc)
 
 
 def makedir(dest_dir):
     if dest_dir:
-        if os.path.isabs(dest_dir): # absolute path /home/user/some/folder
+        if os.path.isabs(dest_dir):  # absolute path /home/user/some/folder
             path = dest_dir
         else:
             path = os.path.join(os.getcwd(), dest_dir)

@@ -173,6 +173,16 @@ CAUTION: each port can be used for 5 concurrent downloads at maximum (recommende
 
 if you want let's say 20 concurrent downloads, provide 5 tor ports
 
+use IsolateDestAddr to ensure that all connections made through that port are isolated from each other
+
+    # /etc/tor/torrc
+
+    SocksPort 9050 IsolateDestAddr
+
+    SocksPort 9051 IsolateDestAddr
+
+    SocksPort 9052 IsolateDestAddr
+
 .. code:: bash
 
     $ webshare link-scrape matrix 1999 --download --tor-ports 9050 9051 9052 9053 --pool 16
