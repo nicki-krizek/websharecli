@@ -21,13 +21,12 @@ def download_url(url, output_path, tor, tor_port, i=1, n=1, retries=3, timeout=1
     else:
         # print(f"{T.yellow}Downloading file without tor, your ip: {original_ip}{T.normal}", file=sys.stderr)
         pbar_desc = f"{i}/{n}{T.normal} {os.path.basename(output_path)}"
-    response = session.get(url, stream=True)
+    response = session.get(url, stream=True, allow_redirects=True, headers={"Connection": "close"})
     total_size_in_bytes = int(response.headers.get('content-length', 0))
 
     progress_bar = tqdm(desc=pbar_desc, total=total_size_in_bytes, unit='B', unit_scale=True)
     with open(output_path, 'wb') as f:
-        for chunk in response.iter_content(chunk_size=config.CONFIG.chunk_size, allow_redirects=True,
-                                           headers={"Connection": "close"}):
+        for chunk in response.iter_content(chunk_size=config.CONFIG.chunk_size):
             if chunk:
                 progress_bar.update(len(chunk))
                 f.write(chunk)
