@@ -8,3 +8,4 @@ setuptools
 tqdm
 socks
 bs4
+random-user-agent
