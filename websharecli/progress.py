@@ -7,13 +7,16 @@ class ProgressBar(object):
     def __init__(self, desc):
         self.desc = desc
         self.pbar = None
+        self.downloaded = 0
+        self.total_size = 0
 
     def __call__(self, block_num, block_size, total_size):
         if not self.pbar:
             self.pbar = tqdm(desc=self.desc, total=total_size, unit='B', unit_scale=True)
+            self.total_size = total_size
 
-        downloaded = block_num * block_size
-        if downloaded < total_size:
+        self.downloaded = block_num * block_size
+        if self.downloaded < self.total_size:
             self.pbar.update(block_size)
         else:
             self.finished()

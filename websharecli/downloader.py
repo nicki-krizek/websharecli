@@ -58,7 +58,7 @@ def download_url(url, output_path, tor, tor_port, i=1, n=1, retries=3, timeout=1
         # print("File downloaded successfully!", file=sys.stderr)
 
 
-def download_url_urlreceive(url, output_path, tor, tor_port, i=1, n=1, retries=3, timeout=10):
+def download_url_urlretrive(url, output_path, tor, tor_port, i=1, n=1):
     urlretrieve, original_ip, tor_ip = make_urlretrieve_tor(tor, tor_port)
     filename = os.path.basename(output_path)
     if tor:
@@ -68,31 +68,6 @@ def download_url_urlreceive(url, output_path, tor, tor_port, i=1, n=1, retries=3
         pbar_desc = f"{i}/{n}{T.normal} {filename}"
 
     (local_filename, headers) = urlretrieve(url, output_path, ProgressBar(pbar_desc))
-
-    # if total_size_in_bytes != 0 and progress_bar.n != total_size_in_bytes:
-    #     # print("Error: Download incomplete. Try again", file=sys.stderr)
-    #     # clear current attempt
-    #     session.close()
-    #     os.remove(output_path)
-    #     time.sleep(timeout)
-    #     # try again
-    #     ident = ident_from_download_link(url)
-    #     url = file_link_by_id(ident)
-    #     retries -= 1
-    #     if retries > 0:
-    #         progress_bar.desc = f"{T.red}RETRY{T.normal} " + progress_bar.desc
-    #         progress_bar.close()
-    #
-    #         return download_url(url, output_path, tor, tor_port, i, n, retries, timeout)
-    #     else:
-    #         # print("Download incomplete. No more retries.", file=sys.stderr)
-    #         progress_bar.desc = f"{T.red}FAIL{T.normal} " + progress_bar.desc
-    #         progress_bar.close()
-    #         raise TooManyDownloadRetriesException(f"Unable to download {url}. Tried {retries} times.")
-    # else:
-    #     progress_bar.desc = f"{T.green}SUCCESS{T.normal} " + progress_bar.desc
-    #     progress_bar.close()
-    #     # print("File downloaded successfully!", file=sys.stderr)
 
 
 def download_urls(urls, output_folder, tor, tor_ports, pool_size):
@@ -104,7 +79,7 @@ def download_urls(urls, output_folder, tor, tor_ports, pool_size):
     n_list = [len(urls)] * len(urls)
     with ThreadPoolExecutor(max_workers=pool_size) as executor:
         # Submit tasks to the executor
-        futures = [executor.submit(download_url_urlreceive, url, output_path, tor, tor_port, i, n)
+        futures = [executor.submit(download_url_urlretrive, url, output_path, tor, tor_port, i, n)
                    for (url, output_path, tor, tor_port, i, n) in
                    zip(urls, output_paths, tors, ports_for_each_url, i_list, n_list)]
         # Use as_completed to get the results as they are completed
