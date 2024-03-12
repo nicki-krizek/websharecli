@@ -61,6 +61,9 @@ def download_url(url, output_path, tor, tor_port, i=1, n=1, retries=3, timeout=1
 def download_url_urlretrive(url, output_path, tor, tor_port, i=1, n=1):
     urlretrieve, original_ip, tor_ip = make_urlretrieve_tor(tor, tor_port)
     filename = os.path.basename(output_path)
+    # get actual url, when scraping large number of files, the original link may become invalid
+    ident = ident_from_download_link(url)
+    url = file_link_by_id(ident)
     if tor:
         pbar_desc = f"{i}/{n} {T.magenta}(TOR):{tor_ip}{T.normal} {filename}"
         assert original_ip != tor_ip, "Traffic is not going through tor. Exit."
