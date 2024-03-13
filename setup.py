@@ -8,7 +8,7 @@ setup(
     description="webshare.cz CLI downloader",
     author="Tomas Krizek",
     author_email="tomas.krizek@mailbox.org",
-    url="https://github.com/tomaskrizek/websharecli",
+    url="https://github.com/tkrizek/websharecli",
     license="GPLv3",
     packages=['websharecli'],
     package_data={'websharecli': ['static/*']},
